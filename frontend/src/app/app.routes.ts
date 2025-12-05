@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'posts',
+    path: 'login',
     loadComponent: () =>
-      import('../app/components/post/post.component').then((c) => c.PostComponent),
+      import('../app/pages/login-page/login-page.component').then((c) => c.LoginPageComponent),
   },
 ];
