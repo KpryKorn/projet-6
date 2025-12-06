@@ -4,7 +4,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
-import { AuthService } from '../../core/services/auth/auth.service';
+import { Store } from '@ngrx/store';
+import { AuthActions } from '../../core/state/auth/auth.actions';
+import { selectError, selectIsLoading } from '../../core/state/auth/auth.selectors';
 
 @Component({
   selector: 'app-login-page',
@@ -12,24 +14,26 @@ import { AuthService } from '../../core/services/auth/auth.service';
   templateUrl: './login-page.component.html',
 })
 export class LoginPageComponent extends TailwindWrapperComponent {
-  private readonly authService = inject(AuthService);
+  private readonly store = inject(Store);
+
+  isLoading = this.store.selectSignal(selectIsLoading);
+  error = this.store.selectSignal(selectError);
 
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(6)],
+    }),
   });
 
   onSubmit() {
-    if (this.loginForm.valid && this.loginForm.value.email && this.loginForm.value.password) {
-      const { email, password } = this.loginForm.value;
-
-      this.authService.login({ email, password }).subscribe({
-        next: (response) => {
-          console.log('Login successful:', response);
-          // sauvegarder le token dans localstorage
-        },
-      }),
-        this.loginForm.reset();
+    if (this.loginForm.valid) {
+      const payload = this.loginForm.getRawValue();
+      this.store.dispatch(AuthActions.login({ payload }));
     }
   }
 

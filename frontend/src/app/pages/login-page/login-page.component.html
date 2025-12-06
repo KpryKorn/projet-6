@@ -36,10 +36,14 @@
       pButton
       severity="secondary"
       type="submit"
-      [disabled]="loginForm.invalid"
+      [disabled]="loginForm.invalid || isLoading()"
       class="disabled:cursor-not-allowed"
     >
       <span pButtonLabel>Submit</span>
     </button>
+
+    @if (error()) {
+    <div class="p-2 text-red-500 text-center">Une erreur est survenue, veuillez réessayer.</div>
+    }
   </form>
 </section>
