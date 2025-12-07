@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, exhaustMap, map, of } from 'rxjs';
+import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { AuthService } from '../../services/auth/auth.service';
 import { AuthActions } from './auth.actions';
 
@@ -8,7 +8,7 @@ import { AuthActions } from './auth.actions';
 export const loginEffect = createEffect(
   (actions$ = inject(Actions), authService = inject(AuthService)) => {
     return actions$.pipe(
-      ofType(AuthActions.login),
+      ofType(AuthActions.login), // filtre pour ne réagir qu'à l'action login
       exhaustMap(({ payload }) =>
         authService.login(payload).pipe(
           map((response) => AuthActions.loginSuccess({ response })),
@@ -18,4 +18,16 @@ export const loginEffect = createEffect(
     );
   },
   { functional: true }
+);
+
+export const loginSuccessEffect = createEffect(
+  (actions$ = inject(Actions)) => {
+    return actions$.pipe(
+      ofType(AuthActions.loginSuccess),
+      tap(({ response }) => {
+        localStorage.setItem('token', response.token);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
 );
