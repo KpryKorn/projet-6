@@ -9,8 +9,8 @@ export const loginEffect = createEffect(
   (actions$ = inject(Actions), authService = inject(AuthService)) => {
     return actions$.pipe(
       ofType(AuthActions.login), // filtre pour ne réagir qu'à l'action login
-      exhaustMap(({ payload }) =>
-        authService.login(payload).pipe(
+      exhaustMap(({ request }) =>
+        authService.login(request).pipe(
           map((response) => AuthActions.loginSuccess({ response })),
           catchError((error) => of(AuthActions.loginFailure({ error })))
         )

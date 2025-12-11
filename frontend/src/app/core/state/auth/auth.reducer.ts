@@ -4,7 +4,7 @@ import { AuthActions } from './auth.actions';
 export interface AuthState {
   token: string | null;
   isLoading: boolean;
-  error: unknown | null;
+  error: string | null;
 }
 
 export const initialState: AuthState = {

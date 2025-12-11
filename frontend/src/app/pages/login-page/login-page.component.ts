@@ -32,8 +32,8 @@ export class LoginPageComponent extends TailwindWrapperComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const payload = this.loginForm.getRawValue();
-      this.store.dispatch(AuthActions.login({ payload }));
+      const request = this.loginForm.getRawValue();
+      this.store.dispatch(AuthActions.login({ request }));
     }
   }
 
