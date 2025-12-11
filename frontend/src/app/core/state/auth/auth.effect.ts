@@ -1,60 +1,108 @@
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 import { AuthService } from '../../services/auth/auth.service';
 import { AuthActions } from './auth.actions';
 
-// écoute toutes les actions de l'appli => réagit à une action spécifique pour appeler la méthode en question
-export const loginEffect = createEffect(
-  (actions$ = inject(Actions), authService = inject(AuthService)) => {
-    return actions$.pipe(
-      ofType(AuthActions.login), // filtre pour ne réagir qu'à l'action login
-      exhaustMap(({ request }) =>
-        authService.login(request).pipe(
-          map((response) => AuthActions.loginSuccess({ response })),
-          catchError((error) => of(AuthActions.loginFailure({ error })))
+const handleAuthSuccess = (router: Router) =>
+  tap(() => {
+    router.navigate(['/']);
+  });
+
+export const authEffects = {
+  initAuthCheck: createEffect(
+    (actions$ = inject(Actions), authService = inject(AuthService)) => {
+      return actions$.pipe(
+        ofType(AuthActions.initAuthCheck),
+        exhaustMap(() =>
+          authService.refreshToken().pipe(
+            map((response) => AuthActions.refreshTokenSuccess({ response })),
+            catchError((error) => of(AuthActions.refreshTokenFailure({ error: error.message })))
+          )
         )
-      )
-    );
-  },
-  { functional: true }
-);
+      );
+    },
+    { functional: true }
+  ),
 
-export const loginSuccessEffect = createEffect(
-  (actions$ = inject(Actions)) => {
-    return actions$.pipe(
-      ofType(AuthActions.loginSuccess),
-      tap(({ response }) => {
-        localStorage.setItem('token', response.token);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
-
-export const registerEffect = createEffect(
-  (actions$ = inject(Actions), authService = inject(AuthService)) => {
-    return actions$.pipe(
-      ofType(AuthActions.register),
-      exhaustMap(({ request }) =>
-        authService.register(request).pipe(
-          map((response) => AuthActions.registerSuccess({ response })),
-          catchError((error) => of(AuthActions.registerFailure({ error })))
+  login: createEffect(
+    (actions$ = inject(Actions), authService = inject(AuthService)) => {
+      return actions$.pipe(
+        ofType(AuthActions.login),
+        exhaustMap(({ request }) =>
+          authService.login(request).pipe(
+            map((response) => AuthActions.loginSuccess({ response })),
+            catchError((error) => of(AuthActions.loginFailure({ error: error.message })))
+          )
         )
-      )
-    );
-  },
-  { functional: true }
-);
+      );
+    },
+    { functional: true }
+  ),
 
-export const registerSuccessEffect = createEffect(
-  (actions$ = inject(Actions)) => {
-    return actions$.pipe(
-      ofType(AuthActions.registerSuccess),
-      tap(({ response }) => {
-        localStorage.setItem('token', response.token);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
+  register: createEffect(
+    (actions$ = inject(Actions), authService = inject(AuthService)) => {
+      return actions$.pipe(
+        ofType(AuthActions.register),
+        exhaustMap(({ request }) =>
+          authService.register(request).pipe(
+            map((response) => AuthActions.registerSuccess({ response })),
+            catchError((error) => of(AuthActions.registerFailure({ error: error.message })))
+          )
+        )
+      );
+    },
+    { functional: true }
+  ),
+
+  refreshToken: createEffect(
+    (actions$ = inject(Actions), authService = inject(AuthService)) => {
+      return actions$.pipe(
+        ofType(AuthActions.refreshToken),
+        exhaustMap(() =>
+          authService.refreshToken().pipe(
+            map((response) => AuthActions.refreshTokenSuccess({ response })),
+            catchError((error) => of(AuthActions.refreshTokenFailure({ error: error.message })))
+          )
+        )
+      );
+    },
+    { functional: true }
+  ),
+
+  logout: createEffect(
+    (actions$ = inject(Actions), authService = inject(AuthService)) => {
+      return actions$.pipe(
+        ofType(AuthActions.logout),
+        exhaustMap(() =>
+          authService.logout().pipe(
+            map(() => AuthActions.logoutSuccess()),
+            catchError((error) => of(AuthActions.logoutFailure({ error: error.message })))
+          )
+        )
+      );
+    },
+    { functional: true }
+  ),
+
+  redirectOnSuccess: createEffect(
+    (actions$ = inject(Actions), router = inject(Router)) => {
+      return actions$.pipe(
+        ofType(AuthActions.loginSuccess, AuthActions.registerSuccess),
+        handleAuthSuccess(router)
+      );
+    },
+    { functional: true, dispatch: false }
+  ),
+
+  logoutRedirect: createEffect(
+    (actions$ = inject(Actions), router = inject(Router)) => {
+      return actions$.pipe(
+        ofType(AuthActions.logoutSuccess),
+        tap(() => router.navigate(['/']))
+      );
+    },
+    { functional: true, dispatch: false }
+  ),
+};

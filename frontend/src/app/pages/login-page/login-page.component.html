@@ -56,7 +56,10 @@
     </button>
 
     @if (error()) {
-    <div class="p-2 text-red-500 text-center">Une erreur est survenue, veuillez réessayer.</div>
+    <div class="p-2 text-red-500 text-center">
+      <p>Une erreur est survenue, veuillez réessayer.</p>
+      <p class="mt-2">Error: {{ error() }}</p>
+    </div>
     }
   </form>
 </section>
