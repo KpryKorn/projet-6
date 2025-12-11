@@ -1,45 +1,58 @@
-<section class="container grow flex flex-col items-center justify-center gap-6">
-  <h1 class="text-3xl font-medium">Register</h1>
+<app-header />
+<section class="relative container grow flex flex-col items-center justify-center gap-6">
+  <div class="absolute top-8 left-8">
+    <a routerLink="/" class="flex items-center gap-2">
+      <i class="pi pi-arrow-left text-xl"></i>
+      <span>Retour à l'accueil</span>
+    </a>
+  </div>
+
+  <a routerLink="/" class="block sm:hidden -mb-4">
+    <img src="logo_p6.png" alt="Logo" class="h-28" />
+  </a>
+
+  <h1 class="text-3xl font-medium">Inscription</h1>
 
   <form
     [formGroup]="registerForm"
     (ngSubmit)="onSubmit()"
-    class="flex flex-col gap-4 w-full sm:w-56"
+    class="flex flex-col gap-2 w-full sm:w-56"
   >
     <div class="flex flex-col gap-1">
-      <input
-        pInputText
-        type="email"
-        id="email"
-        placeholder="Email"
-        formControlName="email"
-        [invalid]="isInvalid('email')"
-      />
-
-      @if (isInvalid('email')) {
-      <p class="text-sm text-red-500">Email is required</p>
-      }
-    </div>
-
-    <div class="flex flex-col gap-1">
+      <label for="username" class="text-sm">Nom d'utilisateur</label>
       <input
         pInputText
         type="username"
         id="username"
-        placeholder="Username"
         formControlName="username"
         [invalid]="isInvalid('username')"
       />
 
       @if (isInvalid('username')) {
-      <p class="text-sm text-red-500">Username is required</p>
+      <p class="text-sm text-red-500">Votre nom d'utilisateur est requis</p>
       }
     </div>
 
     <div class="flex flex-col gap-1">
+      <label for="email" class="text-sm">Email</label>
+      <input
+        pInputText
+        type="email"
+        id="email"
+        formControlName="email"
+        [invalid]="isInvalid('email')"
+      />
+
+      @if (isInvalid('email')) {
+      <p class="text-sm text-red-500">Votre email est requis</p>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="password" class="text-sm">Mot de passe</label>
       <p-password
         formControlName="password"
-        placeholder="Password"
+        inputId="password"
         [invalid]="isInvalid('password')"
         autocomplete="off"
         fluid
@@ -47,14 +60,15 @@
       />
 
       @if (isInvalid('password')) {
-      <p class="text-sm text-red-500">Password is required</p>
+      <p class="text-sm text-red-500">Votre mot de passe est requis</p>
       }
     </div>
 
     <div class="flex flex-col gap-1">
+      <label for="confirmPassword" class="text-sm">Confirmation</label>
       <p-password
         formControlName="confirmPassword"
-        placeholder="Confirm password"
+        inputId="confirmPassword"
         [invalid]="
           isInvalid('confirmPassword') ||
           (registerForm.touched && registerForm.hasError('passwordMismatch'))
@@ -66,20 +80,19 @@
       />
 
       @if (isInvalid('confirmPassword')) {
-      <p class="text-sm text-red-500">Password confirmation is required</p>
+      <p class="text-sm text-red-500">Merci de confirmer votre mot de passe</p>
       } @else if (registerForm.touched && registerForm.hasError('passwordMismatch')) {
-      <p class="text-sm text-red-500">Passwords do not match</p>
+      <p class="text-sm text-red-500">Les mots de passe ne correspondent pas</p>
       }
     </div>
 
     <button
       pButton
-      severity="secondary"
       type="submit"
       [disabled]="registerForm.invalid || isLoading()"
-      class="disabled:cursor-not-allowed"
+      class="mt-2 disabled:cursor-not-allowed"
     >
-      <span pButtonLabel>Submit</span>
+      <span pButtonLabel>S'inscrire</span>
     </button>
 
     @if (error()) {

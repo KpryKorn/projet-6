@@ -1,25 +1,39 @@
-<section class="container grow flex flex-col items-center justify-center gap-6">
-  <h1 class="text-3xl font-medium">Login</h1>
+<app-header />
+<section class="relative container grow flex flex-col items-center justify-center gap-6">
+  <div class="absolute top-8 left-8">
+    <a routerLink="/" class="flex items-center gap-2">
+      <i class="pi pi-arrow-left text-xl"></i>
+      <span>Retour à l'accueil</span>
+    </a>
+  </div>
 
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full sm:w-56">
+  <a routerLink="/" class="block sm:hidden">
+    <img src="logo_p6.png" alt="Logo" class="h-28" />
+  </a>
+
+  <h1 class="text-3xl font-medium">Se connecter</h1>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-2 w-full sm:w-56">
     <div class="flex flex-col gap-1">
+      <label for="email" class="text-sm">Email</label>
       <input
         pInputText
         type="email"
         id="email"
-        placeholder="Email"
         formControlName="email"
         [invalid]="isInvalid('email')"
       />
 
       @if (isInvalid('email')) {
-      <p class="text-sm text-red-500">Email is required</p>
+      <p class="text-sm text-red-500">Votre email est requis</p>
       }
     </div>
 
     <div class="flex flex-col gap-1">
+      <label for="password" class="text-sm">Mot de passe</label>
       <p-password
         formControlName="password"
+        inputId="password"
         [invalid]="isInvalid('password')"
         [feedback]="false"
         autocomplete="off"
@@ -28,18 +42,17 @@
       />
 
       @if (isInvalid('password')) {
-      <p class="text-sm text-red-500">Password required</p>
+      <p class="text-sm text-red-500">Votre mot de passe est requis</p>
       }
     </div>
 
     <button
       pButton
-      severity="secondary"
       type="submit"
       [disabled]="loginForm.invalid || isLoading()"
-      class="disabled:cursor-not-allowed"
+      class="mt-2 disabled:cursor-not-allowed"
     >
-      <span pButtonLabel>Submit</span>
+      <span pButtonLabel>Se connecter</span>
     </button>
 
     @if (error()) {

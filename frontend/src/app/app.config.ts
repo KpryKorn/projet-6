@@ -17,9 +17,9 @@ import { authReducer } from './core/state/auth/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
 import * as authEffects from './core/state/auth/auth.effect';
 
-const AuraSky = definePreset(Aura, {
+const AuraMdd = definePreset(Aura, {
   semantic: {
-    primary: palette('{sky}'),
+    primary: palette('#7763C5'),
   },
 });
 
@@ -32,7 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: AuraSky,
+        preset: AuraMdd,
         options: {
           cssLayer: {
             name: 'primeng',

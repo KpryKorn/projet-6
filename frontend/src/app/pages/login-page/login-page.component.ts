@@ -7,10 +7,19 @@ import { PasswordModule } from 'primeng/password';
 import { Store } from '@ngrx/store';
 import { AuthActions } from '../../core/state/auth/auth.actions';
 import { selectError, selectIsLoading } from '../../core/state/auth/auth.selectors';
+import { RouterLink } from '@angular/router';
+import { HeaderComponent } from '../../components/header/header.component';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
+  imports: [
+    ReactiveFormsModule,
+    InputTextModule,
+    ButtonModule,
+    PasswordModule,
+    RouterLink,
+    HeaderComponent,
+  ],
   templateUrl: './login-page.component.html',
 })
 export class LoginPageComponent extends TailwindWrapperComponent {

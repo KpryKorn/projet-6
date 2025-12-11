@@ -15,6 +15,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AuthActions } from '../../core/state/auth/auth.actions';
 import { PasswordModule } from 'primeng/password';
+import { RouterLink } from '@angular/router';
+import { HeaderComponent } from '../../components/header/header.component';
 
 const passwordMismatchValidator: ValidatorFn = (
   control: AbstractControl
@@ -29,7 +31,14 @@ const passwordMismatchValidator: ValidatorFn = (
 
 @Component({
   selector: 'app-register-page',
-  imports: [ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
+  imports: [
+    ReactiveFormsModule,
+    InputTextModule,
+    ButtonModule,
+    PasswordModule,
+    RouterLink,
+    HeaderComponent,
+  ],
   templateUrl: './register-page.component.html',
 })
 export class RegisterPageComponent extends TailwindWrapperComponent {
