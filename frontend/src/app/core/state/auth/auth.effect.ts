@@ -31,3 +31,30 @@ export const loginSuccessEffect = createEffect(
   },
   { functional: true, dispatch: false }
 );
+
+export const registerEffect = createEffect(
+  (actions$ = inject(Actions), authService = inject(AuthService)) => {
+    return actions$.pipe(
+      ofType(AuthActions.register),
+      exhaustMap(({ request }) =>
+        authService.register(request).pipe(
+          map((response) => AuthActions.registerSuccess({ response })),
+          catchError((error) => of(AuthActions.registerFailure({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const registerSuccessEffect = createEffect(
+  (actions$ = inject(Actions)) => {
+    return actions$.pipe(
+      ofType(AuthActions.registerSuccess),
+      tap(({ response }) => {
+        localStorage.setItem('token', response.token);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
