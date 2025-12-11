@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TailwindWrapperComponent } from './tailwind-wrapper.component';
+import { HomePageComponent } from './home-page.component';
 
-describe('TailwindWrapperComponent', () => {
-  let component: TailwindWrapperComponent;
-  let fixture: ComponentFixture<TailwindWrapperComponent>;
+describe('HomePageComponent', () => {
+  let component: HomePageComponent;
+  let fixture: ComponentFixture<HomePageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TailwindWrapperComponent]
+      imports: [HomePageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TailwindWrapperComponent);
+    fixture = TestBed.createComponent(HomePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

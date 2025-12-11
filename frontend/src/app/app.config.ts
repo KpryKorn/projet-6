@@ -12,10 +12,14 @@ import { definePreset, palette } from '@primeuix/themes';
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
+import { provideState, provideStore } from '@ngrx/store';
+import { authReducer } from './core/state/auth/auth.reducer';
+import { provideEffects } from '@ngrx/effects';
+import * as authEffects from './core/state/auth/auth.effect';
 
-const AuraSky = definePreset(Aura, {
+const AuraMdd = definePreset(Aura, {
   semantic: {
-    primary: palette('{sky}'),
+    primary: palette('#7763C5'),
   },
 });
 
@@ -28,7 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: AuraSky,
+        preset: AuraMdd,
         options: {
           cssLayer: {
             name: 'primeng',
@@ -37,5 +41,8 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    provideStore(),
+    provideState({ name: 'auth', reducer: authReducer }),
+    provideEffects(authEffects),
   ],
 };
