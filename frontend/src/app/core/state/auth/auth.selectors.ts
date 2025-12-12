@@ -14,3 +14,8 @@ export const selectAccessToken = createSelector(selectAuthState, (state) => stat
 export const selectIsLoading = createSelector(selectAuthState, (state) => state.isLoading);
 
 export const selectError = createSelector(selectAuthState, (state) => state.error);
+
+export const selectAuthStatus = createSelector(selectAuthState, (state) => ({
+  isAuthenticated: state.isAuthenticated,
+  isLoading: state.isLoading,
+}));

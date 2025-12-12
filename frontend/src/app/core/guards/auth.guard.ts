@@ -2,19 +2,19 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { selectIsAuthenticated } from '../state/auth/auth.selectors';
+import { filter, map, take } from 'rxjs/operators';
+import { selectAuthStatus } from '../state/auth/auth.selectors';
 
-// todo: améliorer le guard pour qu'il attende la fin du check d'authentification avant de rediriger
 export const authGuard: CanActivateFn = (): Observable<boolean> => {
   const store = inject(Store);
   const router = inject(Router);
 
   return store.pipe(
-    select(selectIsAuthenticated),
+    select(selectAuthStatus),
+    filter((status) => !status.isLoading),
     take(1),
-    map((isAuthenticated) => {
-      if (!isAuthenticated) {
+    map((status) => {
+      if (!status.isAuthenticated) {
         router.navigate(['/login']);
         return false;
       }
