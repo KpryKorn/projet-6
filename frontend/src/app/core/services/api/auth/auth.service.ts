@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AccessTokenResponse, LoginRequest, RegisterRequest } from '../../models/auth';
+import { AccessTokenResponse, LoginRequest, RegisterRequest } from '../../../models/auth';
 import { Observable } from 'rxjs';
 
 @Injectable({

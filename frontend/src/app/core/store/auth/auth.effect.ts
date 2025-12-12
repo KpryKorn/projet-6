@@ -2,12 +2,12 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../services/api/auth/auth.service';
 import { AuthActions } from './auth.actions';
 
 const handleAuthSuccess = (router: Router) =>
   tap(() => {
-    router.navigate(['/']);
+    router.navigate(['/feed']);
   });
 
 export const authEffects = {

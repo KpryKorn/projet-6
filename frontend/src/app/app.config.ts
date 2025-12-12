@@ -13,9 +13,9 @@ import { definePreset, palette } from '@primeuix/themes';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideState, provideStore } from '@ngrx/store';
-import { authReducer } from './core/state/auth/auth.reducer';
+import { authReducer } from './core/store/auth/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
-import { authEffects } from './core/state/auth/auth.effect';
+import { authEffects } from './core/store/auth/auth.effect';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 const AuraMdd = definePreset(Aura, {
@@ -39,6 +39,7 @@ export const appConfig: ApplicationConfig = {
             name: 'primeng',
             order: 'theme, base, primeng',
           },
+          darkModeSelector: false || 'none',
         },
       },
     }),

@@ -5,8 +5,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { Store } from '@ngrx/store';
-import { AuthActions } from '../../core/state/auth/auth.actions';
-import { selectError, selectIsLoading } from '../../core/state/auth/auth.selectors';
+import { AuthActions } from '../../core/store/auth/auth.actions';
+import { selectError, selectIsLoading } from '../../core/store/auth/auth.selectors';
 import { RouterLink } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';
 

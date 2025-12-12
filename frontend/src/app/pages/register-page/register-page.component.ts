@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { TailwindWrapperComponent } from '../../components/tailwind-wrapper/tailwind-wrapper.component';
 import { Store } from '@ngrx/store';
-import { selectError, selectIsLoading } from '../../core/state/auth/auth.selectors';
+import { selectError, selectIsLoading } from '../../core/store/auth/auth.selectors';
 import {
   AbstractControl,
   FormControl,
@@ -13,7 +13,7 @@ import {
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { AuthActions } from '../../core/state/auth/auth.actions';
+import { AuthActions } from '../../core/store/auth/auth.actions';
 import { PasswordModule } from 'primeng/password';
 import { RouterLink } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header.component';

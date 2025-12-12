@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { selectAuthStatus } from '../state/auth/auth.selectors';
+import { selectAuthStatus } from '../store/auth/auth.selectors';
 
 export const authGuard: CanActivateFn = (): Observable<boolean> => {
   const store = inject(Store);
@@ -15,7 +15,7 @@ export const authGuard: CanActivateFn = (): Observable<boolean> => {
     take(1),
     map((status) => {
       if (!status.isAuthenticated) {
-        router.navigate(['/login']);
+        router.navigate(['/']);
         return false;
       }
       return true;

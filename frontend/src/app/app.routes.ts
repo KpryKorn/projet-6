@@ -4,7 +4,6 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    canActivate: [authGuard],
     loadComponent: () =>
       import('../app/pages/home-page/home-page.component').then((c) => c.HomePageComponent),
   },
@@ -19,6 +18,20 @@ export const routes: Routes = [
       import('../app/pages/register-page/register-page.component').then(
         (c) => c.RegisterPageComponent
       ),
+  },
+  {
+    path: 'feed',
+    loadComponent: () =>
+      import('../app/pages/feed-page/feed-page.component').then((c) => c.FeedPageComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./pages/my-profile-page/my-profile-page.component').then(
+        (c) => c.MyProfilePageComponent
+      ),
+    canActivate: [authGuard],
   },
   { path: '**', redirectTo: '' },
 ];
