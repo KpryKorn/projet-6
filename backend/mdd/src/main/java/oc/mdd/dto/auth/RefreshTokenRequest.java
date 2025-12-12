@@ -1,4 +1,4 @@
-package oc.mdd.dto;
+package oc.mdd.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class RefreshTokenRequest {
 
-    private String email;
-    private String password;
+    private String refreshToken;
 }

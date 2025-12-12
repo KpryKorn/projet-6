@@ -1,4 +1,4 @@
-package oc.mdd.dto;
+package oc.mdd.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AccessTokenResponse {
 
-    private String email;
-    private String username;
-    private String password;
+    private String accessToken;
 }
