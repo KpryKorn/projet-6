@@ -4,11 +4,13 @@ import oc.mdd.dto.AuthResponse;
 import oc.mdd.dto.LoginRequest;
 import oc.mdd.dto.RegisterRequest;
 import oc.mdd.entity.User;
+import oc.mdd.exception.InvalidTokenException;
 import oc.mdd.exception.UserAlreadyExistsException;
 import oc.mdd.repository.UserRepository;
 import oc.mdd.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +35,12 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -44,7 +50,25 @@ public class AuthService {
                         request.getPassword()));
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
-        String jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public AuthResponse refreshToken(String refreshToken) {
+        String userEmail = jwtService.extractUserEmail(refreshToken);
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (jwtService.isTokenValid(refreshToken, user)) {
+            String accessToken = jwtService.generateToken(user);
+            return AuthResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+        }
+        throw new InvalidTokenException("Invalid refresh token");
     }
 }

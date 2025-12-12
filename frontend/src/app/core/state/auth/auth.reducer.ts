@@ -2,13 +2,15 @@ import { createReducer, on } from '@ngrx/store';
 import { AuthActions } from './auth.actions';
 
 export interface AuthState {
-  token: string | null;
+  accessToken: string | null;
+  isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
 }
 
 export const initialState: AuthState = {
-  token: null,
+  accessToken: null,
+  isAuthenticated: false,
   isLoading: false,
   error: null,
 };
@@ -16,44 +18,53 @@ export const initialState: AuthState = {
 export const authReducer = createReducer(
   initialState,
 
-  // prend l'état actuel + une action => retourne le nouvel état
-  on(AuthActions.login, (state) => ({
+  on(
+    AuthActions.initAuthCheck,
+    AuthActions.login,
+    AuthActions.register,
+    AuthActions.refreshToken,
+    (state) => ({
+      ...state,
+      isLoading: true,
+      error: null,
+    })
+  ),
+
+  on(
+    AuthActions.loginSuccess,
+    AuthActions.registerSuccess,
+    AuthActions.refreshTokenSuccess,
+    (state, { response }) => ({
+      ...state,
+      accessToken: response.accessToken,
+      isAuthenticated: true,
+      isLoading: false,
+      error: null,
+    })
+  ),
+
+  on(
+    AuthActions.loginFailure,
+    AuthActions.registerFailure,
+    AuthActions.refreshTokenFailure,
+    (state, { error }) => ({
+      ...state,
+      accessToken: null,
+      isAuthenticated: false,
+      isLoading: false,
+      error: error,
+    })
+  ),
+
+  on(AuthActions.logout, (state) => ({
     ...state,
     isLoading: true,
-    error: null,
   })),
 
-  on(AuthActions.loginSuccess, (state, { response }) => ({
-    ...state,
-    token: response.token,
-    isLoading: false,
-    error: null,
-  })),
+  on(AuthActions.logoutSuccess, () => initialState),
 
-  on(AuthActions.loginFailure, (state, { error }) => ({
-    ...state,
-    token: null,
-    isLoading: false,
-    error: error,
-  })),
-
-  on(AuthActions.register, (state) => ({
-    ...state,
-    isLoading: true,
-    error: null,
-  })),
-
-  on(AuthActions.registerSuccess, (state, { response }) => ({
-    ...state,
-    token: response.token,
-    isLoading: false,
-    error: null,
-  })),
-
-  on(AuthActions.registerFailure, (state, { error }) => ({
-    ...state,
-    token: null,
-    isLoading: false,
+  on(AuthActions.logoutFailure, (state, { error }) => ({
+    ...initialState,
     error: error,
   }))
 );

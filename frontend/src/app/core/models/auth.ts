@@ -9,6 +9,6 @@ export interface RegisterRequest {
   password: string;
 }
 
-export interface AuthResponse {
-  token: string;
+export interface AccessTokenResponse {
+  accessToken: string;
 }

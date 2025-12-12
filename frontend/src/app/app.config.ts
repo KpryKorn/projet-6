@@ -11,11 +11,12 @@ import Aura from '@primeuix/themes/aura';
 import { definePreset, palette } from '@primeuix/themes';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideState, provideStore } from '@ngrx/store';
 import { authReducer } from './core/state/auth/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
-import * as authEffects from './core/state/auth/auth.effect';
+import { authEffects } from './core/state/auth/auth.effect';
+import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 const AuraMdd = definePreset(Aura, {
   semantic: {
@@ -28,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([jwtInterceptor])),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
