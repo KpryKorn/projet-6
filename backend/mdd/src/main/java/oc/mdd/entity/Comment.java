@@ -2,6 +2,8 @@ package oc.mdd.entity;
 
 import java.sql.Timestamp;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Data
@@ -25,8 +28,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
     private String content;
 
+    @CreatedDate
     private Timestamp createdAt;
 
     @ManyToOne

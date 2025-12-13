@@ -8,8 +8,8 @@ import {
 import { inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { BehaviorSubject, Observable, catchError, filter, switchMap, take, throwError } from 'rxjs';
-import { AuthActions } from '../state/auth/auth.actions';
-import { selectAccessToken } from '../state/auth/auth.selectors';
+import { AuthActions } from '../store/auth/auth.actions';
+import { selectAccessToken } from '../store/auth/auth.selectors';
 
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);

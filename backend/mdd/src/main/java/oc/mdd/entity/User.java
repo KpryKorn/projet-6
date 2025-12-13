@@ -62,6 +62,10 @@ public class User implements UserDetails {
         return Collections.emptyList();
     }
 
+    public String getRealUsername() {
+        return this.username;
+    }
+
     @Override
     public String getUsername() {
         return this.email;

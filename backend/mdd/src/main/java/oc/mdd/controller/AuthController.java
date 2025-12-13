@@ -1,9 +1,9 @@
 package oc.mdd.controller;
 
-import oc.mdd.dto.AccessTokenResponse;
-import oc.mdd.dto.AuthResponse;
-import oc.mdd.dto.LoginRequest;
-import oc.mdd.dto.RegisterRequest;
+import oc.mdd.dto.auth.AccessTokenResponse;
+import oc.mdd.dto.auth.AuthResponse;
+import oc.mdd.dto.auth.LoginRequest;
+import oc.mdd.dto.auth.RegisterRequest;
 import oc.mdd.service.AuthService;
 
 import org.springframework.beans.factory.annotation.Value;

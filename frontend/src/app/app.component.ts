@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AuthActions } from './core/state/auth/auth.actions';
+import { AuthActions } from './core/store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
