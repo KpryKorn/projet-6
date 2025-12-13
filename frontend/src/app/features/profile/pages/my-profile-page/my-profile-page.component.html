@@ -1,6 +1,70 @@
 <app-header />
-<section class="container grow flex flex-col py-8">
-  <h1>Mon profil</h1>
+<section class="container grow flex flex-col py-8 justify-center items-center gap-2">
+  <h1 class="text-2xl font-medium mb-8">Mon profil</h1>
 
-  <p>{{ user()?.username }}</p>
+  <form
+    [formGroup]="editProfileForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-2 w-full sm:w-56"
+  >
+    <div class="flex flex-col gap-1">
+      <input
+        class="font-medium"
+        pInputText
+        type="username"
+        id="username"
+        formControlName="username"
+        [invalid]="isInvalid('username')"
+      />
+
+      @if (isInvalid('username')) {
+      <p class="text-sm text-red-500">Votre nom d'utilisateur est requis</p>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <input
+        class="font-medium"
+        pInputText
+        type="email"
+        id="email"
+        formControlName="email"
+        [invalid]="isInvalid('email')"
+      />
+
+      @if (isInvalid('email')) {
+      <p class="text-sm text-red-500">Votre email est requis</p>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <p-password
+        class="*:placeholder:italic"
+        formControlName="password"
+        inputId="password"
+        placeholder="Mot de passe"
+        [invalid]="isInvalid('password')"
+        autocomplete="off"
+        fluid
+        [toggleMask]="true"
+      />
+
+      @if (isInvalid('password')) {
+      <p class="text-sm text-red-500">Votre mot de passe est requis</p>
+      }
+    </div>
+
+    <button
+      pButton
+      type="submit"
+      [disabled]="editProfileForm.invalid"
+      class="mt-2 disabled:cursor-not-allowed"
+    >
+      <span pButtonLabel>Sauvegarder</span>
+    </button>
+  </form>
+
+  <hr class="h-px w-full my-8 bg-black border-0" />
+
+  <h2>Abonnements</h2>
 </section>

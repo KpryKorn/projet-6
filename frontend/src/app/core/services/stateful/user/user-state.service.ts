@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { User } from '../../../models/user';
+import { User, UserRequest } from '../../../models/user';
 import { UserService } from '../../api/user/user.service';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class UserStateService {
     return this.userService.me().pipe(tap((user) => this.userState.set(user)));
   }
 
-  updateMe(user: Partial<User>): Observable<User> {
+  updateMe(user: Partial<UserRequest>): Observable<User> {
     return this.userService
       .updateMe(user)
       .pipe(tap((updatedUser) => this.userState.set(updatedUser)));
