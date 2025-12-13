@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TailwindWrapperComponent } from '../../components/tailwind-wrapper/tailwind-wrapper.component';
-import { HeaderComponent } from '../../components/header/header.component';
-import { UserStateService } from '../../core/services/stateful/user/user-state.service';
+import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
+import { HeaderComponent } from '@components/header/header.component';
+import { UserStateService } from '@services/stateful/user/user-state.service';
 
 @Component({
   selector: 'app-profile-page',

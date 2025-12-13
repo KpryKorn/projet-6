@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TailwindWrapperComponent } from '../../components/tailwind-wrapper/tailwind-wrapper.component';
+import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';

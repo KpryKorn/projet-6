@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { TailwindWrapperComponent } from '../../components/tailwind-wrapper/tailwind-wrapper.component';
+import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { Store } from '@ngrx/store';
-import { AuthActions } from '../../core/store/auth/auth.actions';
-import { selectError, selectIsLoading } from '../../core/store/auth/auth.selectors';
+import { AuthActions } from '@store/auth/auth.actions';
+import { selectError, selectIsLoading } from '@store/auth/auth.selectors';
 import { RouterLink } from '@angular/router';
-import { HeaderComponent } from '../../components/header/header.component';
+import { HeaderComponent } from '@components/header/header.component';
 
 @Component({
   selector: 'app-login-page',
