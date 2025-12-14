@@ -3,10 +3,11 @@ import { Subject } from '@models/subject';
 import { SubjectsService } from '@services/api/subjects/subjects.service';
 import { Observable, tap } from 'rxjs';
 import { HeaderComponent } from '@components/header/header.component';
+import { SubjectsCardComponent } from '../../components/subjects-card/subjects-card.component';
 
 @Component({
   selector: 'app-subjects-page',
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, SubjectsCardComponent],
   templateUrl: './subjects-page.component.html',
   host: { class: 'contents' },
 })
