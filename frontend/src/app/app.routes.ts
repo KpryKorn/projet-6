@@ -39,5 +39,13 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
+  {
+    path: 'subjects',
+    loadComponent: () =>
+      import('../app/features/subjects/pages/subjects-page/subjects-page.component').then(
+        (c) => c.SubjectsPageComponent
+      ),
+    canActivate: [authGuard],
+  },
   { path: '**', redirectTo: '' },
 ];

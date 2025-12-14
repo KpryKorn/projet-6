@@ -12,7 +12,9 @@ export class UserStateService {
   // état privé via signals
   private readonly userState = signal<User | null>(null);
 
-  // état public pour les composants
+  /**
+   * Informations de l'utilisateur connecté
+   */
   public readonly currentUser = this.userState.asReadonly();
 
   fetchMe(): Observable<User> {
