@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -21,8 +20,11 @@ import { HeaderComponent } from '@components/header/header.component';
     HeaderComponent,
   ],
   templateUrl: './login-page.component.html',
+  host: {
+    class: 'contents',
+  },
 })
-export class LoginPageComponent extends TailwindWrapperComponent {
+export class LoginPageComponent {
   private readonly store = inject(Store);
 
   isLoading = this.store.selectSignal(selectIsLoading);

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
@@ -8,5 +7,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-home-page',
   imports: [NgOptimizedImage, ButtonModule, RouterLink],
   templateUrl: './home-page.component.html',
+  host: {
+    class: 'contents',
+  },
 })
-export class HomePageComponent extends TailwindWrapperComponent {}
+export class HomePageComponent {}

@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
 import { Store } from '@ngrx/store';
 import { selectError, selectIsLoading } from '@store/auth/auth.selectors';
 import {
@@ -40,8 +39,11 @@ const passwordMismatchValidator: ValidatorFn = (
     HeaderComponent,
   ],
   templateUrl: './register-page.component.html',
+  host: {
+    class: 'contents',
+  },
 })
-export class RegisterPageComponent extends TailwindWrapperComponent {
+export class RegisterPageComponent {
   private readonly store = inject(Store);
 
   isLoading = this.store.selectSignal(selectIsLoading);

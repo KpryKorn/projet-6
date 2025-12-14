@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TailwindWrapperComponent } from '../tailwind-wrapper/tailwind-wrapper.component';
 import { selectAuthStatus } from '@store/auth/auth.selectors';
 import { Store } from '@ngrx/store';
 import { AuthActions } from '@store/auth/auth.actions';
@@ -9,8 +8,9 @@ import { AuthActions } from '@store/auth/auth.actions';
   selector: 'app-header',
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './header.component.html',
+  host: { class: 'contents' },
 })
-export class HeaderComponent extends TailwindWrapperComponent {
+export class HeaderComponent {
   private readonly store = inject(Store);
 
   authStatus = this.store.selectSignal(selectAuthStatus);

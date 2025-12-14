@@ -1,5 +1,4 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
-import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
 import { HeaderComponent } from '@components/header/header.component';
 import { UserStateService } from '@services/stateful/user/user-state.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,8 +10,9 @@ import { PasswordModule } from 'primeng/password';
   selector: 'app-profile-page',
   imports: [HeaderComponent, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
   templateUrl: './my-profile-page.component.html',
+  host: { class: 'contents' },
 })
-export class MyProfilePageComponent extends TailwindWrapperComponent implements OnInit {
+export class MyProfilePageComponent implements OnInit {
   private readonly userStateService = inject(UserStateService);
 
   public readonly user = this.userStateService.currentUser;
@@ -33,7 +33,6 @@ export class MyProfilePageComponent extends TailwindWrapperComponent implements 
   });
 
   constructor() {
-    super();
     effect(() => {
       const currentUser = this.user();
       if (currentUser) {
