@@ -3,6 +3,7 @@ package oc.mdd.service;
 import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import oc.mdd.dto.UserDto;
@@ -12,6 +13,7 @@ import oc.mdd.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
