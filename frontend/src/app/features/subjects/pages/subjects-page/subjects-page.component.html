@@ -7,7 +7,11 @@
   <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
     @for (subject of subjects(); track subject.id) {
     <li>
-      <app-subjects-card [subject]="subject" />
+      <app-subjects-card
+        [subject]="subject"
+        [isSubscribed]="subject.isSubscribed"
+        (onSubscribe)="handleOnSubscribe($event)"
+      />
     </li>
     }
   </ul>

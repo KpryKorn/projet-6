@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../../models/user';
+import { Subject } from '@models/subject';
 
 @Injectable({
   providedIn: 'root',
@@ -19,5 +20,9 @@ export class UserService {
 
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`/api/users/${id}`);
+  }
+
+  getMySubscriptions(): Observable<Subject[]> {
+    return this.http.get<Subject[]>('/api/users/me/subscriptions');
   }
 }

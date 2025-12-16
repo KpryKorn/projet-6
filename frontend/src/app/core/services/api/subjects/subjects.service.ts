@@ -12,4 +12,16 @@ export class SubjectsService {
   getAllSubjects(): Observable<Subject[]> {
     return this.http.get<Subject[]>('/api/subjects');
   }
+
+  getSubjectById(id: number): Observable<Subject> {
+    return this.http.get<Subject>(`/api/subjects/${id}`);
+  }
+
+  subscribeToSubject(id: number): Observable<void> {
+    return this.http.post<void>(`/api/subjects/${id}/subscribe`, {});
+  }
+
+  unsubscribeFromSubject(id: number): Observable<void> {
+    return this.http.delete<void>(`/api/subjects/${id}/unsubscribe`);
+  }
 }

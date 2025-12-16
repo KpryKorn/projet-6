@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Subject } from '@models/subject';
 import { ButtonModule } from 'primeng/button';
 
@@ -11,5 +11,12 @@ import { ButtonModule } from 'primeng/button';
   },
 })
 export class SubjectsCardComponent {
-  @Input({ required: true }) subject!: Subject;
+  subject = input.required<Subject>();
+  isSubscribed = input<boolean>(false);
+
+  onSubscribe = output<number>();
+
+  subscribe() {
+    this.onSubscribe.emit(this.subject().id);
+  }
 }
