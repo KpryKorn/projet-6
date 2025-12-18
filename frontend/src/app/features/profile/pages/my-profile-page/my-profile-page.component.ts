@@ -1,21 +1,33 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
-import { TailwindWrapperComponent } from '@components/tailwind-wrapper/tailwind-wrapper.component';
 import { HeaderComponent } from '@components/header/header.component';
 import { UserStateService } from '@services/stateful/user/user-state.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { SubscriptionComponent } from '../../components/subscription/subscription.component';
+import { SubjectsService } from '@services/api/subjects/subjects.service';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [HeaderComponent, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
+  imports: [
+    HeaderComponent,
+    ReactiveFormsModule,
+    InputTextModule,
+    ButtonModule,
+    PasswordModule,
+    SubscriptionComponent,
+  ],
   templateUrl: './my-profile-page.component.html',
+  host: { class: 'contents' },
 })
-export class MyProfilePageComponent extends TailwindWrapperComponent implements OnInit {
+export class MyProfilePageComponent implements OnInit {
   private readonly userStateService = inject(UserStateService);
+  private readonly subjectsService = inject(SubjectsService);
 
   public readonly user = this.userStateService.currentUser;
+
+  public readonly userSubscriptions = this.userStateService.currentUserSubscriptions;
 
   editProfileForm = new FormGroup({
     username: new FormControl('', {
@@ -33,7 +45,6 @@ export class MyProfilePageComponent extends TailwindWrapperComponent implements 
   });
 
   constructor() {
-    super();
     effect(() => {
       const currentUser = this.user();
       if (currentUser) {
@@ -59,6 +70,12 @@ export class MyProfilePageComponent extends TailwindWrapperComponent implements 
     }
   }
 
+  handleOnUnsubscribe(subjectId: number): void {
+    this.subjectsService.unsubscribeFromSubject(subjectId).subscribe(() => {
+      this.userStateService.fetchMySubscriptions().subscribe();
+    });
+  }
+
   isInvalid(controlName: string): boolean {
     const control = this.editProfileForm.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));
@@ -66,5 +83,6 @@ export class MyProfilePageComponent extends TailwindWrapperComponent implements 
 
   ngOnInit(): void {
     this.userStateService.fetchMe().subscribe();
+    this.userStateService.fetchMySubscriptions().subscribe();
   }
 }

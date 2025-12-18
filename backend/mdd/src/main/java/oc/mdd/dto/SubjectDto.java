@@ -1,7 +1,6 @@
 package oc.mdd.dto;
 
 import java.sql.Timestamp;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,11 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class SubjectDto {
     private Long id;
-    private String username;
-    private String email;
+    private String title;
+    private String description;
     private Timestamp createdAt;
-    private Timestamp updatedAt;
-    private Set<SubjectDto> subscribedSubjects;
 }

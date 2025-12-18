@@ -1,10 +1,12 @@
+import { Subject } from './subject';
+
 export interface User {
   id: number;
   username: string;
   email: string;
   createdAt: string;
   updatedAt: string;
-  // subscribedSubjects: Subject[];
+  subscribedSubjects: Subject[];
 }
 
 export interface UserRequest {
