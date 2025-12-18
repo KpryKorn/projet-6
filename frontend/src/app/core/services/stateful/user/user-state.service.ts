@@ -11,11 +11,13 @@ export class UserStateService {
 
   // état privé via signals
   private readonly userState = signal<User | null>(null);
+  private readonly userSubscriptionsState = signal<User['subscribedSubjects'] | null>(null);
 
   /**
    * Informations de l'utilisateur connecté
    */
   public readonly currentUser = this.userState.asReadonly();
+  public readonly currentUserSubscriptions = this.userSubscriptionsState.asReadonly();
 
   fetchMe(): Observable<User> {
     return this.userService.me().pipe(tap((user) => this.userState.set(user)));
@@ -25,5 +27,11 @@ export class UserStateService {
     return this.userService
       .updateMe(user)
       .pipe(tap((updatedUser) => this.userState.set(updatedUser)));
+  }
+
+  fetchMySubscriptions(): Observable<User['subscribedSubjects']> {
+    return this.userService
+      .getMySubscriptions()
+      .pipe(tap((subs) => this.userSubscriptionsState.set(subs)));
   }
 }

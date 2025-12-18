@@ -1,5 +1,5 @@
 <app-header />
-<section class="container grow flex flex-col py-8 justify-center items-center gap-2">
+<section class="container grow flex flex-col py-6 justify-center items-center gap-2">
   <h1 class="text-2xl font-medium mb-8">Mon profil</h1>
 
   <form
@@ -66,5 +66,10 @@
 
   <hr class="h-px w-full my-8 bg-black border-0" />
 
-  <h2>Abonnements</h2>
+  <h2 class="text-2xl font-medium mb-8">Abonnements</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+    @for (sub of userSubscriptions(); track sub.id) {
+    <app-subscription [subject]="sub" (onUnsubscribe)="handleOnUnsubscribe($event)" />
+    }
+  </div>
 </section>
