@@ -1,0 +1,66 @@
+<app-header />
+
+<section class="container grow py-6 flex flex-col items-center justify-center gap-2">
+  <h1 class="text-3xl font-bold mb-4">Créer un nouvel article</h1>
+
+  <form
+    [formGroup]="createPostForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-2 w-full sm:w-56"
+  >
+    <div class="flex flex-col gap-1">
+      <label for="subject" class="text-sm">Renseigner un thème</label>
+      <p-select
+        formControlName="subject"
+        id="subject"
+        [options]="subjects()"
+        optionLabel="title"
+        [invalid]="isInvalid('subject')"
+        class="w-full md:w-56"
+      />
+
+      @if (isInvalid('subject')) {
+      <p class="text-sm text-red-500">Le thème est requis</p>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="title" class="text-sm">Titre de l'article</label>
+      <input
+        pInputText
+        type="text"
+        id="title"
+        formControlName="title"
+        [invalid]="isInvalid('title')"
+      />
+
+      @if (isInvalid('title')) {
+      <p class="text-sm text-red-500">Le titre est requis</p>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="content" class="text-sm">Contenu de l'article</label>
+      <textarea
+        pInputTextarea
+        id="content"
+        formControlName="content"
+        rows="5"
+        [invalid]="isInvalid('content')"
+      ></textarea>
+
+      @if (isInvalid('content')) {
+      <p class="text-sm text-red-500">Le contenu est requis</p>
+      }
+    </div>
+
+    <button
+      pButton
+      type="submit"
+      [disabled]="createPostForm.invalid"
+      class="mt-2 disabled:cursor-not-allowed"
+    >
+      <span pButtonLabel>Créer</span>
+    </button>
+  </form>
+</section>
