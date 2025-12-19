@@ -9,17 +9,18 @@
     class="flex flex-col gap-2 w-full sm:w-56"
   >
     <div class="flex flex-col gap-1">
-      <label for="subject" class="text-sm">Renseigner un thème</label>
+      <label for="subjectTitle" class="text-sm">Renseigner un thème</label>
       <p-select
-        formControlName="subject"
-        id="subject"
+        formControlName="subjectTitle"
+        id="subjectTitle"
         [options]="subjects()"
         optionLabel="title"
-        [invalid]="isInvalid('subject')"
+        optionValue="title"
+        [invalid]="isInvalid('subjectTitle')"
         class="w-full md:w-56"
       />
 
-      @if (isInvalid('subject')) {
+      @if (isInvalid('subjectTitle')) {
       <p class="text-sm text-red-500">Le thème est requis</p>
       }
     </div>

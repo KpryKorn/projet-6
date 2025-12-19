@@ -5,8 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
-import { SubjectsService } from '@services/api/subjects/subjects.service';
-import { Subject } from '@models/subject';
+import { SubjectsStore } from '@store/subjects/subjects.store';
+import { PostService } from '@services/api/post/post.service';
 
 @Component({
   selector: 'app-posts-page',
@@ -24,23 +24,19 @@ import { Subject } from '@models/subject';
   },
 })
 export class PostsPageComponent implements OnInit {
-  private readonly subjectsService = inject(SubjectsService);
+  private readonly subjectsStore = inject(SubjectsStore);
+  private readonly postService = inject(PostService);
 
-  private readonly subjectsState = signal<Subject[] | null>(null);
-
-  public readonly subjects = this.subjectsState.asReadonly();
+  public readonly subjects = this.subjectsStore.subjects;
 
   createPostForm = new FormGroup({
-    subject: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    subjectTitle: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     title: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     content: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
-
-  loadSubjects() {
-    this.subjectsService.getAllSubjects().subscribe((subjects) => {
-      this.subjectsState.set(subjects);
-    });
-  }
 
   isInvalid(controlName: string) {
     const control = this.createPostForm.get(controlName);
@@ -49,12 +45,17 @@ export class PostsPageComponent implements OnInit {
 
   onSubmit() {
     if (this.createPostForm.valid) {
-      const formValue = this.createPostForm.value;
-      console.log('Form submitted:', formValue);
+      const postRequest = {
+        subjectTitle: this.createPostForm.getRawValue().subjectTitle,
+        title: this.createPostForm.getRawValue().title,
+        content: this.createPostForm.getRawValue().content,
+      };
+      this.postService.createPost(postRequest).subscribe();
+      this.createPostForm.reset();
     }
   }
 
   ngOnInit(): void {
-    this.loadSubjects();
+    this.subjectsStore.fetchAllSubjects();
   }
 }

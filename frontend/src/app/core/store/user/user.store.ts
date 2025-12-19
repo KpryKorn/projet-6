@@ -90,8 +90,21 @@ export const UserStore = signalStore(
           tap(() => patchState(store, { isLoading: true, error: null })),
           switchMap((subjectId) =>
             subjectsService.unsubscribeFromSubject(subjectId).pipe(
-              switchMap(() => userService.getMySubscriptions()),
-              tap((subscriptions) => patchState(store, { subscriptions, isLoading: false })),
+              switchMap(() =>
+                userService
+                  .me()
+                  .pipe(
+                    switchMap((user) =>
+                      userService
+                        .getMySubscriptions()
+                        .pipe(
+                          tap((subscriptions) =>
+                            patchState(store, { user, subscriptions, isLoading: false })
+                          )
+                        )
+                    )
+                  )
+              ),
               catchError((error) => {
                 patchState(store, { isLoading: false, error: error.message });
                 return of(null);
