@@ -5,7 +5,7 @@
         <img src="logo_p6.png" alt="Logo" class="h-16" />
       </a>
 
-      @if (authStatus().isAuthenticated) {
+      @if (isAuthenticated()) {
       <div class="flex items-center gap-4">
         <button
           (click)="logout()"

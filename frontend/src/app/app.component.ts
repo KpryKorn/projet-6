@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { AuthActions } from './core/store/auth/auth.actions';
+import { AuthStore } from '@store/auth/auth.store';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +9,9 @@ import { AuthActions } from './core/store/auth/auth.actions';
 })
 export class App implements OnInit {
   protected readonly title = signal('frontend');
-  private readonly store = inject(Store);
+  private readonly authStore = inject(AuthStore);
 
   ngOnInit(): void {
-    this.store.dispatch(AuthActions.initAuthCheck());
+    this.authStore.refresh();
   }
 }

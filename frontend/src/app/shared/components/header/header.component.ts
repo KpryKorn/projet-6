@@ -1,8 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { selectAuthStatus } from '@store/auth/auth.selectors';
-import { Store } from '@ngrx/store';
-import { AuthActions } from '@store/auth/auth.actions';
+import { AuthStore } from '@store/auth/auth.store';
 
 @Component({
   selector: 'app-header',
@@ -11,11 +9,11 @@ import { AuthActions } from '@store/auth/auth.actions';
   host: { class: 'contents' },
 })
 export class HeaderComponent {
-  private readonly store = inject(Store);
+  private readonly authStore = inject(AuthStore);
 
-  authStatus = this.store.selectSignal(selectAuthStatus);
+  isAuthenticated = this.authStore.isAuthenticated;
 
   logout() {
-    this.store.dispatch(AuthActions.logout());
+    this.authStore.logout();
   }
 }

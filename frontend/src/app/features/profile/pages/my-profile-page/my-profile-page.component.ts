@@ -1,6 +1,6 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from '@components/header/header.component';
-import { UserStateService } from '@services/stateful/user/user-state.service';
+import { UserStore } from '@store/user/user.store';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -22,12 +22,12 @@ import { SubjectsService } from '@services/api/subjects/subjects.service';
   host: { class: 'contents' },
 })
 export class MyProfilePageComponent implements OnInit {
-  private readonly userStateService = inject(UserStateService);
+  private readonly userStore = inject(UserStore);
   private readonly subjectsService = inject(SubjectsService);
 
-  public readonly user = this.userStateService.currentUser;
+  public readonly user = this.userStore.user;
 
-  public readonly userSubscriptions = this.userStateService.currentUserSubscriptions;
+  public readonly userSubscriptions = this.userStore.subscriptions;
 
   editProfileForm = new FormGroup({
     username: new FormControl('', {
@@ -59,21 +59,17 @@ export class MyProfilePageComponent implements OnInit {
   onSubmit(): void {
     if (this.editProfileForm.valid) {
       const { username, email, password } = this.editProfileForm.value;
-      this.userStateService
-        .updateMe({
-          username: username || undefined,
-          email: email || undefined,
-          password: password || undefined,
-        })
-        .subscribe();
+      this.userStore.updateMe({
+        username: username || undefined,
+        email: email || undefined,
+        password: password || undefined,
+      });
       this.editProfileForm.get('password')?.reset();
     }
   }
 
   handleOnUnsubscribe(subjectId: number): void {
-    this.subjectsService.unsubscribeFromSubject(subjectId).subscribe(() => {
-      this.userStateService.fetchMySubscriptions().subscribe();
-    });
+    this.userStore.unsubscribeFromSubject(subjectId);
   }
 
   isInvalid(controlName: string): boolean {
@@ -82,7 +78,7 @@ export class MyProfilePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userStateService.fetchMe().subscribe();
-    this.userStateService.fetchMySubscriptions().subscribe();
+    this.userStore.fetchMe();
+    this.userStore.fetchMySubscriptions();
   }
 }

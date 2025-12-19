@@ -5,11 +5,10 @@ import {
   HttpInterceptorFn,
   HttpRequest,
 } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { inject, Injector } from '@angular/core';
+import { AuthStore } from '../store/auth/auth.store';
 import { BehaviorSubject, Observable, catchError, filter, switchMap, take, throwError } from 'rxjs';
-import { AuthActions } from '../store/auth/auth.actions';
-import { selectAccessToken } from '../store/auth/auth.selectors';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
@@ -26,16 +25,15 @@ function addTokenHeader(request: HttpRequest<unknown>, token: string | null): Ht
 function handle401Error(
   request: HttpRequest<unknown>,
   next: HttpHandlerFn,
-  store: Store
+  authStore: InstanceType<typeof AuthStore>
 ): Observable<HttpEvent<unknown>> {
   if (!isRefreshing) {
     isRefreshing = true;
     refreshTokenSubject.next(null);
-    store.dispatch(AuthActions.refreshToken());
+    authStore.refresh();
 
-    return store.pipe(
-      select(selectAccessToken),
-      filter((token) => token !== null),
+    return toObservable(authStore.accessToken).pipe(
+      filter((token): token is string => !!token),
       take(1),
       switchMap((token) => {
         isRefreshing = false;
@@ -44,42 +42,47 @@ function handle401Error(
       }),
       catchError((err) => {
         isRefreshing = false;
-        store.dispatch(AuthActions.logout());
+        authStore.logout();
         return throwError(() => err);
       })
     );
-  } else {
-    return refreshTokenSubject.pipe(
-      filter((token) => token !== null),
-      take(1),
-      switchMap((token) => next(addTokenHeader(request, token)))
-    );
   }
+
+  return refreshTokenSubject.pipe(
+    filter((token) => token !== null),
+    take(1),
+    switchMap((token) => next(addTokenHeader(request, token)))
+  );
 }
 
-export const jwtInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<HttpEvent<unknown>> => {
-  const store = inject(Store);
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const injector = inject(Injector);
+  let authStore: InstanceType<typeof AuthStore> | null = null;
 
-  if (req.url.includes('/api/auth/')) {
-    return next(req);
+  const getAuthStore = () => {
+    if (!authStore) {
+      authStore = injector.get(AuthStore);
+    }
+    return authStore;
+  };
+
+  const token = getAuthStore().accessToken();
+
+  if (token) {
+    req = addTokenHeader(req, token);
   }
 
-  return store.pipe(
-    select(selectAccessToken),
-    take(1),
-    switchMap((token) => {
-      const clonedReq = addTokenHeader(req, token);
-      return next(clonedReq).pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === 401) {
-            return handle401Error(req, next, store);
-          }
-          return throwError(() => error);
-        })
-      );
+  return next(req).pipe(
+    catchError((error) => {
+      if (
+        error instanceof HttpErrorResponse &&
+        error.status === 401 &&
+        !req.url.includes('/api/auth/login') &&
+        !req.url.includes('/api/auth/register')
+      ) {
+        return handle401Error(req, next, getAuthStore());
+      }
+      return throwError(() => error);
     })
   );
 };

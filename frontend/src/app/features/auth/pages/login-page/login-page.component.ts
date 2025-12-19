@@ -3,9 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
-import { Store } from '@ngrx/store';
-import { AuthActions } from '@store/auth/auth.actions';
-import { selectError, selectIsLoading } from '@store/auth/auth.selectors';
+import { AuthStore } from '@store/auth/auth.store';
 import { RouterLink } from '@angular/router';
 import { HeaderComponent } from '@components/header/header.component';
 
@@ -25,10 +23,10 @@ import { HeaderComponent } from '@components/header/header.component';
   },
 })
 export class LoginPageComponent {
-  private readonly store = inject(Store);
+  protected readonly authStore = inject(AuthStore);
 
-  isLoading = this.store.selectSignal(selectIsLoading);
-  error = this.store.selectSignal(selectError);
+  isLoading = this.authStore.isLoading;
+  error = this.authStore.error;
 
   loginForm = new FormGroup({
     email: new FormControl('', {
@@ -44,7 +42,7 @@ export class LoginPageComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const request = this.loginForm.getRawValue();
-      this.store.dispatch(AuthActions.login({ request }));
+      this.authStore.login(request);
       this.loginForm.reset();
     }
   }
