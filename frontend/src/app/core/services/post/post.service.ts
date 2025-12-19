@@ -12,4 +12,8 @@ export class PostService {
   createPost(postRequest: PostRequest): Observable<void> {
     return this.http.post<void>(`/api/posts`, { ...postRequest });
   }
+
+  getFeedPosts(params: { page: number; size: number }): Observable<Post[]> {
+    return this.http.get<Post[]>(`/api/posts/feed`, { params });
+  }
 }

@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { SubscriptionComponent } from '../../components/subscription/subscription.component';
-import { SubjectsService } from '@services/api/subjects/subjects.service';
+import { SubjectsService } from '@services/subjects/subjects.service';
 
 @Component({
   selector: 'app-profile-page',

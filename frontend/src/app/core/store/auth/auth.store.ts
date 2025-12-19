@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { signalStore, withState, withMethods, patchState, withHooks } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap, catchError, of } from 'rxjs';
-import { AuthService } from '../../services/api/auth/auth.service';
-import { LoginRequest, RegisterRequest } from '../../models/auth';
+import { AuthService } from '@services/auth/auth.service';
+import { LoginRequest, RegisterRequest } from '@models/auth';
 
 export interface AuthState {
   accessToken: string | null;

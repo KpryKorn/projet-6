@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
 import { SubjectsStore } from '@store/subjects/subjects.store';
-import { PostService } from '@services/api/post/post.service';
+import { PostService } from '@services/post/post.service';
 
 @Component({
   selector: 'app-posts-page',

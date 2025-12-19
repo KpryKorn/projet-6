@@ -2,9 +2,9 @@ import { inject } from '@angular/core';
 import { signalStore, withState, withMethods, patchState, withComputed } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap, switchMap, catchError, of, exhaustMap, filter } from 'rxjs';
-import { SubjectsService } from '../../services/api/subjects/subjects.service';
-import { Subject } from '../../models/subject';
-import { UserStore } from '../user/user.store';
+import { SubjectsService } from '@services/subjects/subjects.service';
+import { Subject } from '@models/subject';
+import { UserStore } from '@store/user/user.store';
 import { computed } from '@angular/core';
 
 export interface SubjectsState {

@@ -1,4 +1,5 @@
 import { Subject } from './subject';
+import { User } from './user';
 
 export interface PostRequest {
   subjectTitle: string;
@@ -12,4 +13,5 @@ export interface Post {
   content: string;
   createdAt: string;
   subject: Subject;
+  author: User;
 }

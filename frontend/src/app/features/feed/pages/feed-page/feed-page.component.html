@@ -1,2 +1,15 @@
 <app-header />
-<section class="container grow flex flex-col py-8">p</section>
+<section class="container grow flex flex-col py-8">
+  @if (store.isLoading()) {
+  <p>Loading…</p>
+  } @if (store.error()) {
+  <p>{{ store.error() }}</p>
+  } @if (store.posts().length === 0) {
+  <p>No posts available.</p>
+  }
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (post of store.posts(); track post.id) {
+    <app-post-card [post]="post" />
+    }
+  </div>
+</section>

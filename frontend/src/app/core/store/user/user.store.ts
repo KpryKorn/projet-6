@@ -2,11 +2,10 @@ import { inject, effect } from '@angular/core';
 import { signalStore, withState, withMethods, patchState, withHooks } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap, catchError, of, filter, exhaustMap } from 'rxjs';
-import { UserService } from '../../services/api/user/user.service';
-import { SubjectsService } from '../../services/api/subjects/subjects.service';
-import { User, UserRequest } from '../../models/user';
-import { Subject } from '../../models/subject';
-import { AuthStore } from '../auth/auth.store';
+import { UserService } from '@services/user/user.service';
+import { SubjectsService } from '@services/subjects/subjects.service';
+import { User, UserRequest } from '@models/user';
+import { Subject } from '@models/subject';
 
 export interface UserState {
   user: User | null;
