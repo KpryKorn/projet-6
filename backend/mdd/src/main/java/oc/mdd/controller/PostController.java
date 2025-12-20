@@ -3,11 +3,11 @@ package oc.mdd.controller;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,5 +38,11 @@ public class PostController {
     public List<PostDto> getFeedPosts(@AuthenticationPrincipal User currentUser,
             @PageableDefault(size = 20) Pageable pageable) {
         return postService.getFeedPosts(currentUser.getEmail(), pageable);
+    }
+
+    @GetMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public PostDto getPostById(@PathVariable Long postId) {
+        return postService.getPostById(postId);
     }
 }

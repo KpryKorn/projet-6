@@ -13,6 +13,10 @@ export class PostService {
     return this.http.post<void>(`/api/posts`, { ...postRequest });
   }
 
+  getPostById(postId: number): Observable<Post> {
+    return this.http.get<Post>(`/api/posts/${postId}`);
+  }
+
   getFeedPosts(params: { page: number; size: number }): Observable<Post[]> {
     return this.http.get<Post[]>(`/api/posts/feed`, { params });
   }

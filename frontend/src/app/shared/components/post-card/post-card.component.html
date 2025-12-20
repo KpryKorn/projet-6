@@ -1,17 +1,19 @@
-<article class="h-full flex flex-col gap-4 bg-[#f5f5f5] p-6 rounded-lg">
-  <h1 class="font-medium text-xl">{{ post().title }}</h1>
-  <div>
-    <p-tag
-      class="text-sm leading-none"
-      severity="contrast"
-      [value]="post().subject.title"
-      [rounded]="true"
-    />
-  </div>
+<article class="h-full bg-[#f5f5f5] rounded-lg">
+  <a class="h-full flex flex-col gap-4 p-6" [routerLink]="['/posts', post().id]">
+    <h1 class="font-medium text-xl">{{ post().title }}</h1>
+    <div>
+      <p-tag
+        class="text-sm leading-none"
+        severity="contrast"
+        [value]="post().subject.title"
+        [rounded]="true"
+      />
+    </div>
 
-  <div>
-    <p class="text-sm text-gray-600">Author: {{ post().author.username }}</p>
-    <p class="text-sm text-gray-600">Created at: {{ post().createdAt | date : 'short' }}</p>
-  </div>
-  <p class="grow">{{ post().content }}</p>
+    <div>
+      <p class="text-sm text-gray-600">Author: {{ post().author.username }}</p>
+      <p class="text-sm text-gray-600">Created at: {{ post().createdAt | date : 'short' }}</p>
+    </div>
+    <p class="grow line-clamp-3">{{ post().content }}</p>
+  </a>
 </article>

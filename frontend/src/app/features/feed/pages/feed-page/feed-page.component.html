@@ -4,11 +4,26 @@
   <p>Loading…</p>
   } @if (store.error()) {
   <p>{{ store.error() }}</p>
-  } @if (store.posts().length === 0) {
+  } @if (posts().length === 0) {
   <p>No posts available.</p>
   }
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @for (post of store.posts(); track post.id) {
+  <div class="flex justify-between items-center mb-6">
+    <a pButton routerLink="/posts">
+      <span pButtonLabel>Créer un article</span>
+    </a>
+
+    <button (click)="onSortClick()" pButton severity="contrast">
+      <i
+        class="pi"
+        [ngClass]="isDefaultSortOrder ? 'pi-sort-numeric-down' : 'pi-sort-numeric-up'"
+        pButtonIcon
+      ></i>
+      <span pButtonLabel>Trier</span>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-6">
+    @for (post of posts(); track post.id) {
     <app-post-card [post]="post" />
     }
   </div>
