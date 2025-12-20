@@ -17,9 +17,11 @@
         [invalid]="isInvalid('username')"
       />
 
-      @if (isInvalid('username')) {
-      <p class="text-sm text-red-500">Votre nom d'utilisateur est requis</p>
-      }
+      @if (isInvalid('username')) { @if (editProfileForm.get('username')?.hasError('required')) {
+      <p class="text-sm text-red-500">Le nom d'utilisateur est requis</p>
+      } @else if (editProfileForm.get('username')?.hasError('minlength')) {
+      <p class="text-sm text-red-500">Le nom d'utilisateur doit faire au moins 3 caractères</p>
+      } }
     </div>
 
     <div class="flex flex-col gap-1">
@@ -32,9 +34,11 @@
         [invalid]="isInvalid('email')"
       />
 
-      @if (isInvalid('email')) {
-      <p class="text-sm text-red-500">Votre email est requis</p>
-      }
+      @if (isInvalid('email')) { @if (editProfileForm.get('email')?.hasError('required')) {
+      <p class="text-sm text-red-500">L'email est requis</p>
+      } @else if (editProfileForm.get('email')?.hasError('email')) {
+      <p class="text-sm text-red-500">Le format de l'email est invalide</p>
+      } }
     </div>
 
     <div class="flex flex-col gap-1">
@@ -42,7 +46,7 @@
         class="*:placeholder:italic"
         formControlName="password"
         inputId="password"
-        placeholder="Mot de passe"
+        placeholder="Nouveau mot de passe (optionnel)"
         [invalid]="isInvalid('password')"
         autocomplete="off"
         fluid
@@ -50,7 +54,10 @@
       />
 
       @if (isInvalid('password')) {
-      <p class="text-sm text-red-500">Votre mot de passe est requis</p>
+      <p class="text-red-500 text-xs">
+        Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un
+        chiffre et un caractère spécial (@$!%*?&).
+      </p>
       }
     </div>
 

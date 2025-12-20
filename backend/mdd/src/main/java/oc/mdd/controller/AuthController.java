@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AccessTokenResponse register(@RequestBody RegisterRequest request, HttpServletResponse response) {
+    public AccessTokenResponse register(@Valid @RequestBody RegisterRequest request, HttpServletResponse response) {
         AuthResponse authResponse = authService.register(request);
         Cookie cookie = new Cookie("refreshToken", authResponse.getRefreshToken());
         cookie.setHttpOnly(true);
