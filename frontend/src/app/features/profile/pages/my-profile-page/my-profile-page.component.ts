@@ -40,7 +40,10 @@ export class MyProfilePageComponent implements OnInit {
     }),
     password: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.minLength(6)],
+      validators: [
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+      ],
     }),
   });
 
