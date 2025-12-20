@@ -1,6 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectError, selectIsLoading } from '@store/auth/auth.selectors';
 import {
   AbstractControl,
   FormControl,
@@ -12,7 +10,7 @@ import {
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { AuthActions } from '@store/auth/auth.actions';
+import { AuthStore } from '@store/auth/auth.store';
 import { PasswordModule } from 'primeng/password';
 import { RouterLink } from '@angular/router';
 import { HeaderComponent } from '@components/header/header.component';
@@ -44,10 +42,10 @@ const passwordMismatchValidator: ValidatorFn = (
   },
 })
 export class RegisterPageComponent {
-  private readonly store = inject(Store);
+  protected readonly authStore = inject(AuthStore);
 
-  isLoading = this.store.selectSignal(selectIsLoading);
-  error = this.store.selectSignal(selectError);
+  isLoading = this.authStore.isLoading;
+  error = this.authStore.error;
 
   registerForm = new FormGroup(
     {
@@ -78,7 +76,7 @@ export class RegisterPageComponent {
         username: this.registerForm.getRawValue().username,
         password: this.registerForm.getRawValue().confirmPassword,
       };
-      this.store.dispatch(AuthActions.register({ request }));
+      this.authStore.register(request);
       this.registerForm.reset();
     }
   }

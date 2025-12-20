@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { postResolver } from '@services/post/post.resolver';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,25 @@ export const routes: Routes = [
         (c) => c.FeedPageComponent
       ),
     canActivate: [authGuard],
+  },
+  {
+    path: 'posts',
+    loadComponent: () =>
+      import('../app/features/posts/pages/posts-page/posts-page.component').then(
+        (c) => c.PostsPageComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'posts/:postId',
+    loadComponent: () =>
+      import('../app/features/posts/pages/post-id-page/post-id-page.component').then(
+        (c) => c.PostIdPageComponent
+      ),
+    canActivate: [authGuard],
+    resolve: {
+      post: postResolver,
+    },
   },
   {
     path: 'profile',

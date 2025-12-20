@@ -1,20 +1,18 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
-import { selectAuthStatus } from '../store/auth/auth.selectors';
+import { AuthStore } from '../store/auth/auth.store';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filter, map, take } from 'rxjs';
 
-export const authGuard: CanActivateFn = (): Observable<boolean> => {
-  const store = inject(Store);
+export const authGuard: CanActivateFn = () => {
+  const authStore = inject(AuthStore);
   const router = inject(Router);
 
-  return store.pipe(
-    select(selectAuthStatus),
-    filter((status) => !status.isLoading),
+  return toObservable(authStore.isLoading).pipe(
+    filter((isLoading) => !isLoading),
     take(1),
-    map((status) => {
-      if (!status.isAuthenticated) {
+    map(() => {
+      if (!authStore.isAuthenticated()) {
         router.navigate(['/']);
         return false;
       }

@@ -7,5 +7,5 @@ import oc.mdd.entity.Subject;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
-
+    java.util.Optional<Subject> findByTitle(String title);
 }

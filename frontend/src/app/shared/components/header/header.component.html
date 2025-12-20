@@ -5,7 +5,7 @@
         <img src="logo_p6.png" alt="Logo" class="h-16" />
       </a>
 
-      @if (authStatus().isAuthenticated) {
+      @if (isAuthenticated()) {
       <div class="flex items-center gap-4">
         <button
           (click)="logout()"
@@ -16,7 +16,7 @@
 
         <a
           routerLink="/posts"
-          routerLinkActive="bg-primary"
+          routerLinkActive="bg-primary-100"
           class="inline-flex items-center gap-2 border rounded-full px-4 py-2 hover:bg-primary-100 transition"
         >
           Articles
@@ -24,7 +24,7 @@
 
         <a
           routerLink="/subjects"
-          routerLinkActive="bg-primary"
+          routerLinkActive="bg-primary-100"
           class="inline-flex items-center gap-2 border rounded-full px-4 py-2 hover:bg-primary-100 transition"
         >
           Thèmes
@@ -32,7 +32,7 @@
 
         <a
           routerLink="/profile"
-          routerLinkActive="bg-primary"
+          routerLinkActive="bg-primary-100"
           class="inline-flex items-center gap-2 border rounded-full px-4 py-2 hover:bg-primary-100 transition"
         >
           <i class="pi pi-user text-xl"></i>
