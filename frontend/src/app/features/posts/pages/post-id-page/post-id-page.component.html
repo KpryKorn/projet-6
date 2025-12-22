@@ -1,6 +1,6 @@
 <app-header />
 
-<section class="container grow grid grid-rows-2 py-6 divide-y">
+<section class="container grow grid grid-rows-3 py-6 divide-y">
   <div class="min-h-0 pb-8">
     <article class="h-full flex flex-col gap-4 p-6 bg-[#f5f5f5] rounded-lg">
       <h1 class="font-medium text-xl">{{ post()?.title }}</h1>
@@ -21,5 +21,22 @@
     </article>
   </div>
 
-  <div class="min-h-0 pt-8">Zone commentaire</div>
+  <!-- commentaires -->
+  <div class="min-h-0 pt-8 pb-8 overflow-y-auto max-h-[400px]">
+    <ul>
+      @for (comment of comments(); track comment.id) {
+      <li class="mb-6 p-4 bg-[#f9f9f9] rounded-lg">
+        <div class="mb-2 flex flex-col gap-1">
+          <p class="text-sm text-gray-600">Auteur : {{ comment.author.username }}</p>
+          <p class="text-sm text-gray-600">Posté le : {{ comment.createdAt | date : 'short' }}</p>
+        </div>
+        <p>{{ comment.content }}</p>
+      </li>
+      }
+    </ul>
+  </div>
+
+  <div class="min-h-0 pt-8">
+    <app-add-comment-form />
+  </div>
 </section>

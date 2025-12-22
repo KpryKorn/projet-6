@@ -1,0 +1,28 @@
+<form [formGroup]="commentForm" (ngSubmit)="onSubmit()" class="w-full h-full flex flex-col gap-4">
+  <div class="flex flex-col grow gap-1">
+    <textarea
+      pTextarea
+      formControlName="content"
+      [invalid]="isInvalid('content')"
+      autoResize="true"
+      class="grow"
+      fluid="true"
+      placeholder="Écrivez ici votre commentaire..."
+    ></textarea>
+
+    @if (isInvalid('content')) { @if (commentForm.get('content')?.hasError('required')) {
+    <p class="text-sm text-red-500">Le contenu du commentaire est requis</p>
+    } @else if (commentForm.get('content')?.hasError('maxlength')) {
+    <p class="text-sm text-red-500">Le commentaire ne peut pas dépasser 500 caractères</p>
+    } }
+  </div>
+
+  <button
+    type="submit"
+    pButton
+    [disabled]="commentForm.invalid"
+    class="self-end disabled:cursor-not-allowed"
+  >
+    <i pButtonIcon class="pi pi-send"></i>
+  </button>
+</form>

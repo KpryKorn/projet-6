@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import oc.mdd.dto.CommentDto;
 import oc.mdd.dto.PostDto;
 import oc.mdd.dto.PostRequestDto;
 import oc.mdd.entity.User;
+import oc.mdd.service.CommentService;
 import oc.mdd.service.PostService;
 
 @RestController
@@ -26,6 +28,7 @@ import oc.mdd.service.PostService;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,5 +47,11 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public PostDto getPostById(@PathVariable Long postId) {
         return postService.getPostById(postId);
+    }
+
+    @GetMapping("/{postId}/comments")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentDto> getCommentsByPostId(@PathVariable Long postId) {
+        return commentService.getCommentsByPostId(postId);
     }
 }
