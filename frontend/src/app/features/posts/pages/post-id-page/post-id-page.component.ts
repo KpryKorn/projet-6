@@ -7,37 +7,27 @@ import { Tag } from 'primeng/tag';
 import { DatePipe } from '@angular/common';
 import { HeaderComponent } from '@components/header/header.component';
 import { AddCommentFormComponent } from '../../components/add-comment-form/add-comment-form.component';
-import { PostService } from '@services/post/post.service';
-import { Comment } from '@models/comment';
+import { CommentStore } from '../../store/comment.store';
 
 @Component({
   selector: 'app-post-id-page',
   imports: [Tag, DatePipe, HeaderComponent, AddCommentFormComponent],
+  providers: [CommentStore],
   templateUrl: './post-id-page.component.html',
   host: {
     class: 'contents',
   },
 })
 export class PostIdPageComponent implements OnInit {
-  private readonly postService = inject(PostService);
+  readonly store = inject(CommentStore);
   private readonly route = inject(ActivatedRoute);
-
-  // TODO: bouger la logique de fetch des commentaires dans le store ?
-  // TODO: template html
-  commentsSig = signal<Comment[]>([]);
-
-  readonly comments = this.commentsSig.asReadonly();
 
   post = toSignal<Post>(this.route.data.pipe(map((d) => d['post'])));
   postId = Number(this.route.snapshot.paramMap.get('postId'));
 
-  loadComments() {
-    return this.postService.getCommentsByPostId(this.postId);
-  }
+  comments = this.store.comments;
 
   ngOnInit(): void {
-    this.loadComments().subscribe((comments) => {
-      this.commentsSig.set(comments);
-    });
+    this.store.fetchCommentsByPostId(this.postId);
   }
 }

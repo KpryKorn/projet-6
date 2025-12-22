@@ -21,13 +21,14 @@
     </article>
   </div>
 
-  <div class="min-h-0 pt-8 pb-8">
+  <!-- commentaires -->
+  <div class="min-h-0 pt-8 pb-8 overflow-y-auto max-h-[400px]">
     <ul>
       @for (comment of comments(); track comment.id) {
       <li class="mb-6 p-4 bg-[#f9f9f9] rounded-lg">
         <div class="mb-2 flex flex-col gap-1">
-          <p class="text-sm text-gray-600">Author: {{ comment.author.username }}</p>
-          <p class="text-sm text-gray-600">Posted at: {{ comment.createdAt | date : 'short' }}</p>
+          <p class="text-sm text-gray-600">Auteur : {{ comment.author.username }}</p>
+          <p class="text-sm text-gray-600">Posté le : {{ comment.createdAt | date : 'short' }}</p>
         </div>
         <p>{{ comment.content }}</p>
       </li>
