@@ -13,7 +13,18 @@ export class HeaderComponent {
 
   isAuthenticated = this.authStore.isAuthenticated;
 
+  isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
+  }
+
   logout() {
     this.authStore.logout();
+    this.closeMenu();
   }
 }
