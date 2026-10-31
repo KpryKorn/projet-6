@@ -1,117 +1,84 @@
-import { inject, effect } from '@angular/core';
-import { signalStore, withState, withMethods, patchState, withHooks } from '@ngrx/signals';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap, catchError, of, filter, exhaustMap } from 'rxjs';
-import { UserService } from '@services/user/user.service';
+import { computed, inject } from '@angular/core';
+import { Subject } from '@models/post';
+import { Me, ProfileUpdate } from '@models/user';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { SubjectsService } from '@services/subjects/subjects.service';
-import { User, UserRequest } from '@models/user';
-import { Subject } from '@models/subject';
+import { ToastService } from '@services/toast/toast.service';
+import { UserService } from '@services/user/user.service';
+import { SubjectsStore } from '@store/subjects/subjects.store';
+import { firstValueFrom } from 'rxjs';
 
-export interface UserState {
-  user: User | null;
-  subscriptions: Subject[] | null;
-  isLoading: boolean;
-  error: string | null;
+interface UserState {
+  me: Me | null;
+  status: 'idle' | 'loading' | 'loaded' | 'error';
 }
-
-const initialState: UserState = {
-  user: null,
-  subscriptions: null,
-  isLoading: false,
-  error: null,
-};
 
 export const UserStore = signalStore(
   { providedIn: 'root' },
-  withState(initialState),
+  withState<UserState>({ me: null, status: 'idle' }),
+  withComputed(({ me }) => ({
+    subscriptions: computed(() => me()?.subscribedSubjects ?? []),
+    subscribedIds: computed(() => new Set((me()?.subscribedSubjects ?? []).map((s) => s.id))),
+  })),
   withMethods(
-    (store, userService = inject(UserService), subjectsService = inject(SubjectsService)) => ({
-      fetchMe: rxMethod<void>(
-        pipe(
-          filter(() => !store.user() || !!store.error()),
-          tap(() => patchState(store, { isLoading: true, error: null })),
-          exhaustMap(() =>
-            userService.me().pipe(
-              tap((user) => patchState(store, { user, isLoading: false })),
-              catchError((error) => {
-                patchState(store, { isLoading: false, error: error.message });
-                return of(null);
-              })
-            )
-          )
-        )
-      ),
-      updateMe: rxMethod<Partial<UserRequest>>(
-        pipe(
-          tap(() => patchState(store, { isLoading: true, error: null })),
-          switchMap((userData) =>
-            userService.updateMe(userData).pipe(
-              tap((user) => patchState(store, { user, isLoading: false })),
-              catchError((error) => {
-                patchState(store, { isLoading: false, error: error.message });
-                return of(null);
-              })
-            )
-          )
-        )
-      ),
-      fetchMySubscriptions: rxMethod<void>(
-        pipe(
-          tap(() => patchState(store, { isLoading: true, error: null })),
-          exhaustMap(() =>
-            userService.getMySubscriptions().pipe(
-              tap((subscriptions) => patchState(store, { subscriptions, isLoading: false })),
-              catchError((error) => {
-                patchState(store, { isLoading: false, error: error.message });
-                return of(null);
-              })
-            )
-          )
-        )
-      ),
-      subscribeToSubject: rxMethod<number>(
-        pipe(
-          tap(() => patchState(store, { isLoading: true, error: null })),
-          switchMap((subjectId) =>
-            subjectsService.subscribeToSubject(subjectId).pipe(
-              switchMap(() => userService.me()),
-              tap((user) => patchState(store, { user, isLoading: false })),
-              catchError((error) => {
-                patchState(store, { isLoading: false, error: error.message });
-                return of(null);
-              })
-            )
-          )
-        )
-      ),
-      unsubscribeFromSubject: rxMethod<number>(
-        pipe(
-          tap(() => patchState(store, { isLoading: true, error: null })),
-          switchMap((subjectId) =>
-            subjectsService.unsubscribeFromSubject(subjectId).pipe(
-              switchMap(() =>
-                userService
-                  .me()
-                  .pipe(
-                    switchMap((user) =>
-                      userService
-                        .getMySubscriptions()
-                        .pipe(
-                          tap((subscriptions) =>
-                            patchState(store, { user, subscriptions, isLoading: false })
-                          )
-                        )
-                    )
-                  )
-              ),
-              catchError((error) => {
-                patchState(store, { isLoading: false, error: error.message });
-                return of(null);
-              })
-            )
-          )
-        )
-      ),
-    })
-  )
+    (
+      store,
+      userService = inject(UserService),
+      subjectsService = inject(SubjectsService),
+      subjectsStore = inject(SubjectsStore),
+      toast = inject(ToastService),
+    ) => {
+      const setSubscriptions = (subjects: Subject[]) => {
+        const me = store.me();
+        if (me) patchState(store, { me: { ...me, subscribedSubjects: subjects } });
+      };
+
+      return {
+        async load(): Promise<void> {
+          patchState(store, { status: 'loading' });
+          try {
+            patchState(store, { me: await firstValueFrom(userService.me()), status: 'loaded' });
+          } catch {
+            patchState(store, { status: 'error' });
+          }
+        },
+
+        clear(): void {
+          patchState(store, { me: null, status: 'idle' });
+        },
+
+        isFollowing(subjectId: number): boolean {
+          return store.subscribedIds().has(subjectId);
+        },
+
+        /** Optimistic: the interface reacts at once and rolls back if the server refuses. */
+        async toggleFollow(subject: Subject): Promise<void> {
+          const before = store.subscriptions();
+          const following = store.subscribedIds().has(subject.id);
+          setSubscriptions(
+            following ? before.filter((s) => s.id !== subject.id) : [...before, subject],
+          );
+          subjectsStore.adjustFollowers(subject.id, following ? -1 : 1);
+          try {
+            await firstValueFrom(
+              following
+                ? subjectsService.unsubscribe(subject.id)
+                : subjectsService.subscribe(subject.id),
+            );
+            if (!following) toast.success(`Tu suis maintenant ${subject.title}.`);
+          } catch {
+            setSubscriptions(before);
+            subjectsStore.adjustFollowers(subject.id, following ? 1 : -1);
+            toast.error(`L’abonnement à ${subject.title} a échoué. Réessaie dans un instant.`);
+          }
+        },
+
+        async update(changes: ProfileUpdate): Promise<Me> {
+          const me = await firstValueFrom(userService.updateMe(changes));
+          patchState(store, { me });
+          return me;
+        },
+      };
+    },
+  ),
 );

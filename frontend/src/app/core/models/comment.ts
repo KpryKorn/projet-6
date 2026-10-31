@@ -1,15 +1,14 @@
-import { Post } from './post';
-import { User } from './user';
+import { Author } from './post';
+
+export interface Comment {
+  id: number;
+  postId: number;
+  content: string;
+  author: Author;
+  createdAt: string;
+}
 
 export interface CommentRequest {
   content: string;
   postId: number;
-}
-
-export interface Comment {
-  id: number;
-  content: string;
-  post: Post;
-  author: User;
-  createdAt: string;
 }

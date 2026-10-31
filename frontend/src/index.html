@@ -1,13 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr" data-theme="light">
   <head>
     <meta charset="utf-8" />
-    <title>Frontend</title>
+    <title>MDD, des devs qui partagent ce qu’ils apprennent</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta
+      name="description"
+      content="MDD est un réseau social pour développeurs. Suis les langages qui comptent pour toi, publie des articles en Markdown et discute avec des gens du métier."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MDD, des devs qui partagent ce qu’ils apprennent" />
+    <meta
+      property="og:description"
+      content="Suis tes langages, lis des retours d’expérience concrets et publie tes propres articles."
+    />
+    <meta property="og:image" content="/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#f7f7f8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('mdd-theme');
+          var theme = saved || 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="min-h-screen">
+  <body>
     <app-root></app-root>
+    <noscript>MDD a besoin de JavaScript pour fonctionner.</noscript>
   </body>
 </html>

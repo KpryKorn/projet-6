@@ -1,28 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Me, Profile, ProfileUpdate } from '@models/user';
 import { Observable } from 'rxjs';
-import { User } from '@models/user';
-import { Subject } from '@models/subject';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class UserService {
   private readonly http = inject(HttpClient);
 
-  me(): Observable<User> {
-    return this.http.get<User>('/api/users/me');
+  me(): Observable<Me> {
+    return this.http.get<Me>('/api/users/me');
   }
 
-  updateMe(user: Partial<User>): Observable<User> {
-    return this.http.patch<User>('/api/users/me', user);
+  updateMe(changes: ProfileUpdate): Observable<Me> {
+    return this.http.patch<Me>('/api/users/me', changes);
   }
 
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`/api/users/${id}`);
-  }
-
-  getMySubscriptions(): Observable<Subject[]> {
-    return this.http.get<Subject[]>('/api/users/me/subscriptions');
+  profile(id: number): Observable<Profile> {
+    return this.http.get<Profile>(`/api/users/${id}`);
   }
 }

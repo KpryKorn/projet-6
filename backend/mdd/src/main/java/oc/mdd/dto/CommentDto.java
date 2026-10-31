@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDto {
     private Long id;
+    private Long postId;
     private String content;
-    private UserDto author;
-    private PostDto post;
+    private AuthorDto author;
     private Timestamp createdAt;
 }
