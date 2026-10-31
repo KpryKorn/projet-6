@@ -22,10 +22,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Builder.Default;
 
 @Entity
 @Data
@@ -46,6 +46,9 @@ public class User implements UserDetails {
 
     @NonNull
     private String password;
+
+    @Column(length = 280)
+    private String bio;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false, insertable = false)

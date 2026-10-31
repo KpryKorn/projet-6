@@ -1,11 +1,5 @@
 package oc.mdd.controller;
 
-import oc.mdd.dto.auth.AccessTokenResponse;
-import oc.mdd.dto.auth.AuthResponse;
-import oc.mdd.dto.auth.LoginRequest;
-import oc.mdd.dto.auth.RegisterRequest;
-import oc.mdd.service.AuthService;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -15,10 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import oc.mdd.dto.auth.AccessTokenResponse;
+import oc.mdd.dto.auth.AuthResponse;
+import oc.mdd.dto.auth.LoginRequest;
+import oc.mdd.dto.auth.RegisterRequest;
+import oc.mdd.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")
@@ -49,7 +48,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public AccessTokenResponse login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public AccessTokenResponse login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
         AuthResponse authResponse = authService.login(request);
         Cookie cookie = new Cookie("refreshToken", authResponse.getRefreshToken());
         cookie.setHttpOnly(true);

@@ -3,9 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { AccessTokenResponse, LoginRequest, RegisterRequest } from '@models/auth';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
 
@@ -17,7 +15,7 @@ export class AuthService {
     return this.http.post<AccessTokenResponse>('/api/auth/login', payload);
   }
 
-  refreshToken(): Observable<AccessTokenResponse> {
+  refresh(): Observable<AccessTokenResponse> {
     return this.http.post<AccessTokenResponse>('/api/auth/refresh', {});
   }
 

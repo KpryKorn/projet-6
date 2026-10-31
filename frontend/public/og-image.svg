@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+    <rect width="1200" height="630" fill="#f7f7f8" />
+    <g fill="none" stroke="#cfd3da" stroke-width="1">
+        <circle cx="960" cy="315" r="90" />
+        <circle cx="960" cy="315" r="170" />
+        <circle cx="960" cy="315" r="250" stroke="#e3e5e9" stroke-dasharray="2 6" />
+    </g>
+    <circle cx="960" cy="315" r="170" fill="none" stroke="#1f56e0" stroke-width="2"
+        stroke-dasharray="160 910" stroke-linecap="round" />
+    <circle cx="960" cy="315" r="8" fill="#0f1115" />
+    <rect x="96" y="96" width="88" height="88" rx="20" fill="#0f1115" />
+    <path d="M136 126 118 140l18 14M152 126l18 14-18 14" fill="none" stroke="#fff" stroke-width="8"
+        stroke-linecap="round" stroke-linejoin="round" />
+    <text x="96" y="360" font-family="Geist, Arial, sans-serif" font-size="68" font-weight="600"
+        fill="#0f1115" letter-spacing="-2">Le réseau des développeurs</text>
+    <text x="96" y="446" font-family="Geist, Arial, sans-serif" font-size="68" font-weight="600"
+        fill="#1f56e0" letter-spacing="-2">qui aiment écrire.</text>
+    <text x="96" y="530" font-family="Geist Mono, monospace" font-size="26" fill="#6b7280">mdd.dev /
+        Monde de Dév</text>
+</svg>

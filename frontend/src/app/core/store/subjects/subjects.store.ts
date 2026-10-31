@@ -1,54 +1,42 @@
 import { inject } from '@angular/core';
-import { signalStore, withState, withMethods, patchState, withComputed } from '@ngrx/signals';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, tap, switchMap, catchError, of, exhaustMap, filter } from 'rxjs';
+import { Subject } from '@models/post';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { SubjectsService } from '@services/subjects/subjects.service';
-import { Subject } from '@models/subject';
-import { UserStore } from '@store/user/user.store';
-import { computed } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
-export interface SubjectsState {
+interface SubjectsState {
   subjects: Subject[];
-  isLoading: boolean;
-  error: string | null;
+  status: 'idle' | 'loading' | 'loaded' | 'error';
 }
-
-const initialState: SubjectsState = {
-  subjects: [],
-  isLoading: false,
-  error: null,
-};
 
 export const SubjectsStore = signalStore(
   { providedIn: 'root' },
-  withState(initialState),
-  withComputed((store, userStore = inject(UserStore)) => ({
-    subjectsWithSubscriptionStatus: computed(() => {
-      const subjects = store.subjects();
-      const user = userStore.user();
-      const subscriptions = new Set(user?.subscribedSubjects?.map((s) => s.id) || []);
+  withState<SubjectsState>({ subjects: [], status: 'idle' }),
+  withMethods((store, service = inject(SubjectsService)) => ({
+    async load(force = false): Promise<void> {
+      if (store.status() === 'loading' || (store.status() === 'loaded' && !force)) return;
+      patchState(store, { status: 'loading' });
+      try {
+        patchState(store, { subjects: await firstValueFrom(service.list()), status: 'loaded' });
+      } catch {
+        patchState(store, { status: 'error' });
+      }
+    },
 
-      return subjects.map((subject) => ({
-        ...subject,
-        isSubscribed: subscriptions.has(subject.id),
-      }));
-    }),
+    adjustFollowers(subjectId: number, delta: number): void {
+      patchState(store, {
+        subjects: store
+          .subjects()
+          .map((subject) =>
+            subject.id === subjectId
+              ? { ...subject, followerCount: Math.max(0, (subject.followerCount ?? 0) + delta) }
+              : subject,
+          ),
+      });
+    },
+
+    byId(id: number): Subject | undefined {
+      return store.subjects().find((subject) => subject.id === id);
+    },
   })),
-  withMethods((store, subjectsService = inject(SubjectsService)) => ({
-    fetchAllSubjects: rxMethod<void>(
-      pipe(
-        filter(() => store.subjects().length === 0 || !!store.error()),
-        tap(() => patchState(store, { isLoading: true, error: null })),
-        exhaustMap(() =>
-          subjectsService.getAllSubjects().pipe(
-            tap((subjects) => patchState(store, { subjects, isLoading: false })),
-            catchError((error) => {
-              patchState(store, { isLoading: false, error: error.message });
-              return of([]);
-            })
-          )
-        )
-      )
-    ),
-  }))
 );

@@ -1,12 +1,563 @@
 @import 'tailwindcss';
-@import 'tailwindcss-primeui';
-@import 'primeicons/primeicons.css';
+@import '@fontsource-variable/geist/index.css';
+@import '@fontsource-variable/geist-mono/index.css';
+@import '@phosphor-icons/web/regular/style.css';
+@import '@phosphor-icons/web/bold/style.css';
+@import '@phosphor-icons/web/fill/style.css';
 
-html {
-  line-height: normal;
+/* Colors are CSS variables so the whole interface switches theme without a single dark: prefix. */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f7f7f8;
+  --surface: #ffffff;
+  --surface-2: #f1f2f4;
+  --surface-3: #e8eaee;
+  --line: #e3e5e9;
+  --line-strong: #cfd3da;
+  --fg: #0f1115;
+  --muted: #4a505c;
+  --subtle: #6b7280;
+  --accent: #1f56e0;
+  --accent-rgb: 31 86 224;
+  --accent-hover: #1a47bd;
+  --accent-text: #1f56e0;
+  --accent-soft: #e9effd;
+  --accent-fg: #ffffff;
+  --success: #157f3c;
+  --success-soft: #e7f6ec;
+  --danger: #c8222f;
+  --danger-soft: #fdecec;
+  --warning: #a15c00;
+  --warning-soft: #fdf3e1;
+  --grid-dot: #d6d9df;
+  --inverse-bg: #0f1115;
+  --inverse-fg: #f7f7f8;
+  --inverse-border: transparent;
+  --backdrop: rgb(15 17 21 / 0.45);
+  --halo-a: 0.07;
+  --sh-sm: 0 1px 2px rgb(15 17 21 / 0.05);
+  --sh-md: 0 1px 2px rgb(15 17 21 / 0.06), 0 6px 16px -4px rgb(15 17 21 / 0.08);
+  --sh-lg: 0 2px 6px rgb(15 17 21 / 0.06), 0 16px 40px -8px rgb(15 17 21 / 0.18);
+  --hl-keyword: #1f56e0;
+  --hl-string: #157f3c;
+  --hl-number: #a15c00;
+  --hl-comment: #6b7280;
+  --hl-title: #0e7490;
+  --hl-meta: #c8222f;
 }
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 2rem;
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b0c0e;
+  --surface: #121418;
+  --surface-2: #181b20;
+  --surface-3: #20242b;
+  --line: #262a31;
+  --line-strong: #353a43;
+  --fg: #ededf0;
+  --muted: #a4abb8;
+  --subtle: #7c8492;
+  --accent: #6b9bff;
+  --accent-rgb: 107 155 255;
+  --accent-hover: #8db2ff;
+  --accent-text: #8db2ff;
+  --accent-soft: #16213a;
+  --accent-fg: #0b0c0e;
+  --success: #4ade80;
+  --success-soft: #10241a;
+  --danger: #ff6b6b;
+  --danger-soft: #2a1416;
+  --warning: #f5b14a;
+  --warning-soft: #2a1f0d;
+  --grid-dot: #23272e;
+  --inverse-bg: #121418;
+  --inverse-fg: #ededf0;
+  --inverse-border: #353a43;
+  --backdrop: rgb(0 0 0 / 0.6);
+  --halo-a: 0.12;
+  --sh-sm: 0 0 0 1px rgb(255 255 255 / 0.02);
+  --sh-md: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 8px 24px -6px rgb(0 0 0 / 0.6);
+  --sh-lg: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 20px 48px -8px rgb(0 0 0 / 0.7);
+  --hl-keyword: #6b9bff;
+  --hl-string: #7ee2a0;
+  --hl-number: #f5b14a;
+  --hl-comment: #7c8492;
+  --hl-title: #5ed3e0;
+  --hl-meta: #ff7b72;
+}
+
+:root {
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-fg: var(--accent-fg);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-inverse-bg: var(--inverse-bg);
+  --color-inverse-fg: var(--inverse-fg);
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, monospace;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-sm: var(--sh-sm);
+  --shadow-md: var(--sh-md);
+  --shadow-lg: var(--sh-lg);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 72px;
+  }
+
+  body {
+    @apply bg-bg font-sans text-base text-fg antialiased;
+    min-height: 100dvh;
+  }
+
+  /* No italics anywhere in the interface. */
+  em,
+  i,
+  cite,
+  address {
+    font-style: normal;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.025em;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--fg);
+  }
+
+  button:not(:disabled),
+  [role='button'] {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-[15px] font-medium whitespace-nowrap;
+    @apply transition-[background-color,color,border-color,transform,opacity] duration-(--dur-1) ease-out;
+    @apply active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-45 disabled:active:scale-100;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-accent-fg hover:bg-accent-hover;
+  }
+
+  .btn-secondary {
+    @apply border border-line-strong bg-surface text-fg hover:bg-surface-2;
+  }
+
+  .btn-ghost {
+    @apply text-muted hover:bg-surface-2 hover:text-fg;
+  }
+
+  .btn-danger {
+    @apply border border-line-strong bg-surface text-danger hover:bg-danger-soft;
+  }
+
+  .btn-sm {
+    @apply h-8 gap-1 rounded-sm px-3 text-sm;
+  }
+
+  .btn-lg {
+    @apply h-12 px-5 text-base;
+  }
+
+  .field {
+    @apply h-10 w-full rounded-md border border-line-strong bg-surface px-3 text-base text-fg placeholder:text-subtle;
+    @apply transition-[border-color,box-shadow] duration-(--dur-1) ease-out;
+    @apply focus:border-accent focus:outline-none;
+  }
+  textarea.field {
+    @apply h-auto py-2;
+  }
+  .field:focus {
+    box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.18);
+  }
+  .field[aria-invalid='true'] {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgb(200 34 47 / 0.15);
+  }
+
+  .card {
+    @apply rounded-lg border border-line bg-surface;
+    box-shadow: var(--sh-sm);
+  }
+
+  /* Lift on hover for cards that lead somewhere. */
+  .card-lift {
+    @apply transition-[transform,box-shadow,border-color] duration-(--dur-2) ease-out;
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sh-md);
+    border-color: var(--line-strong);
+  }
+
+  .chip {
+    @apply inline-flex h-6 items-center gap-1.5 rounded-md border border-line bg-surface-2 px-2 text-xs font-medium text-muted;
+  }
+
+  /* Square neutral tile that holds an icon or an abbreviation. */
+  .icon-tile {
+    @apply flex size-10 shrink-0 items-center justify-center rounded-md border border-line bg-surface-2 text-fg;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs font-medium tracking-[0.08em] text-subtle uppercase;
+  }
+
+  /* Tab with a 2px indicator, used for the feed and similar switchers. */
+  .tab {
+    @apply relative h-10 px-3 text-sm font-medium text-muted transition-colors duration-(--dur-1) ease-out hover:text-fg;
+    @apply aria-selected:text-fg;
+  }
+  .tab::after {
+    content: '';
+    position: absolute;
+    inset-inline: 12px;
+    bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 240ms var(--ease-in-out);
+  }
+  .tab[aria-selected='true']::after {
+    transform: scaleX(1);
+  }
+
+  .nav-active {
+    @apply text-fg;
+  }
+  .nav-active::after {
+    content: '';
+    position: absolute;
+    inset-inline: 12px;
+    bottom: -13px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .kbd {
+    @apply inline-flex h-5 min-w-5 items-center justify-center rounded-xs border border-line px-1 font-mono text-xs text-subtle;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-5xl px-4 md:px-6;
+  }
+
+  /* Rendered Markdown (articles, comments, composer preview). */
+  .md {
+    @apply text-[17px] text-fg;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+  }
+  .md > * + * {
+    @apply mt-4;
+  }
+  .md h1,
+  .md h2,
+  .md h3,
+  .md h4 {
+    @apply font-semibold text-fg;
+    margin-top: 2rem;
+  }
+  .md h1 {
+    @apply text-2xl;
+  }
+  .md h2 {
+    @apply text-xl;
+  }
+  .md h3,
+  .md h4 {
+    @apply text-lg;
+  }
+  .md a {
+    @apply text-accent-text underline underline-offset-4;
+  }
+  .md strong {
+    @apply font-semibold;
+  }
+  .md em {
+    @apply font-medium;
+  }
+  .md ul {
+    @apply list-disc pl-6;
+  }
+  .md ol {
+    @apply list-decimal pl-6;
+  }
+  .md li + li {
+    @apply mt-1;
+  }
+  .md blockquote {
+    @apply border-l-2 border-line-strong pl-4 text-muted;
+  }
+  .md :not(pre) > code {
+    @apply rounded-xs border border-line bg-surface-2 px-1 py-0.5 font-mono text-sm;
+  }
+  .md pre {
+    @apply overflow-x-auto rounded-lg border border-line bg-surface-2 p-4;
+    line-height: 1.6;
+  }
+  .md pre code {
+    @apply font-mono text-[13.5px];
+    background: none;
+  }
+  .md img {
+    @apply rounded-lg;
+  }
+  .md hr {
+    border-color: var(--line);
+  }
+  .md table {
+    @apply w-full text-sm;
+  }
+  .md th,
+  .md td {
+    @apply border border-line px-3 py-2 text-left;
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-built_in {
+    color: var(--hl-keyword);
+  }
+  .hljs-string,
+  .hljs-regexp,
+  .hljs-attr,
+  .hljs-attribute {
+    color: var(--hl-string);
+  }
+  .hljs-number,
+  .hljs-symbol,
+  .hljs-bullet {
+    color: var(--hl-number);
+  }
+  .hljs-comment,
+  .hljs-quote {
+    color: var(--hl-comment);
+  }
+  .hljs-title,
+  .hljs-section,
+  .hljs-name,
+  .hljs-type,
+  .hljs-class .hljs-title {
+    color: var(--hl-title);
+  }
+  .hljs-meta,
+  .hljs-tag,
+  .hljs-variable {
+    color: var(--hl-meta);
+  }
+}
+
+/* Dotted grid fading out toward the edges, used behind a few key sections only. */
+.dot-grid {
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: -10px -10px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+}
+@media (min-width: 768px) {
+  .dot-grid {
+    background-size: 24px 24px;
+    background-position: -12px -12px;
+  }
+}
+
+/* Barely visible wash behind the landing hero, the only soft gradient of the interface. */
+.hero-halo {
+  background: radial-gradient(
+    640px 320px at 72% 0%,
+    rgb(var(--accent-rgb) / var(--halo-a)),
+    transparent 70%
+  );
+}
+
+.orbit {
+  width: 100%;
+  height: auto;
+}
+.orbit circle {
+  vector-effect: non-scaling-stroke;
+}
+.orbit-spin {
+  transform-origin: 200px 200px;
+  animation: spin 90s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin-left: 0.12em;
+  vertical-align: -0.08em;
+  background: var(--accent);
+  animation: caret 1.1s steps(1) infinite;
+}
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Scroll reveal: transform and opacity only, played once. */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 400ms var(--ease-out),
+    transform 400ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Page entrance for routed views. */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.page-in {
+  animation: page-in 240ms var(--ease-out) both;
+}
+
+/* Mobile menu links rise 8px, one after another. */
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.menu-in {
+  animation: menu-in 240ms var(--ease-out) both;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pop {
+  animation: pop 240ms var(--ease-out);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.toast-in {
+  animation: toast-in 240ms var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    transform: none;
+    transition: opacity 150ms linear;
+  }
+  .page-in,
+  .menu-in,
+  .toast-in,
+  .pop,
+  .orbit-spin,
+  .caret {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
+
+dialog::backdrop {
+  background: var(--backdrop);
 }

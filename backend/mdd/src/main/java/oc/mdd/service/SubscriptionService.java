@@ -1,10 +1,12 @@
 package oc.mdd.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import oc.mdd.dto.SubjectDto;
 import oc.mdd.entity.Subject;
@@ -23,41 +25,28 @@ public class SubscriptionService {
     private final SubjectMapper subjectMapper;
 
     public void subscribeUserToSubject(Long userId, Long subjectId) {
-        if (userId == null || subjectId == null) {
-            throw new IllegalArgumentException("User id and Subject id cannot be null");
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-        Subject subject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + subjectId));
-
-        user.getSubscribedSubjects().add(subject);
+        findUser(userId).getSubscribedSubjects().add(findSubject(subjectId));
     }
 
     public void unsubscribeUserFromSubject(Long userId, Long subjectId) {
-        if (userId == null || subjectId == null) {
-            throw new IllegalArgumentException("User id and Subject id cannot be null");
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-        Subject subject = subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new IllegalArgumentException("Subject not found with id: " + subjectId));
-
-        user.getSubscribedSubjects().remove(subject);
+        findUser(userId).getSubscribedSubjects().remove(findSubject(subjectId));
     }
 
+    @Transactional(readOnly = true)
     public List<SubjectDto> getUserSubscribedSubjects(Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("User id cannot be null");
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-
-        return user.getSubscribedSubjects().stream()
+        return findUser(userId).getSubscribedSubjects().stream()
+                .sorted(Comparator.comparing(Subject::getTitle))
                 .map(subjectMapper::toDto)
                 .toList();
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur introuvable."));
+    }
+
+    private Subject findSubject(Long subjectId) {
+        return subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new EntityNotFoundException("Ce thème n’existe pas."));
     }
 }

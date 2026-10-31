@@ -1,22 +1,15 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthStore } from '../store/auth/auth.store';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { filter, map, take } from 'rxjs';
+import { AuthStore } from '@store/auth/auth.store';
 
-export const authGuard: CanActivateFn = () => {
-  const authStore = inject(AuthStore);
-  const router = inject(Router);
+export const authGuard: CanActivateFn = (_route, state) => {
+  const auth = inject(AuthStore);
+  return auth.isAuthenticated()
+    ? true
+    : inject(Router).createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
+};
 
-  return toObservable(authStore.isLoading).pipe(
-    filter((isLoading) => !isLoading),
-    take(1),
-    map(() => {
-      if (!authStore.isAuthenticated()) {
-        router.navigate(['/']);
-        return false;
-      }
-      return true;
-    })
-  );
+export const guestGuard: CanActivateFn = () => {
+  const auth = inject(AuthStore);
+  return auth.isAuthenticated() ? inject(Router).createUrlTree(['/feed']) : true;
 };

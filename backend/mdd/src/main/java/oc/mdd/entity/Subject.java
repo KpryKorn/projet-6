@@ -32,6 +32,11 @@ public class Subject {
 
     private String description;
 
+    private String color;
+
+    @Column(name = "short_name")
+    private String shortName;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false, insertable = false)
     private Timestamp createdAt;

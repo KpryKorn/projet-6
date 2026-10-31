@@ -1,0 +1,78 @@
+[
+  { "post": "angular-defer", "author": "ines_dev", "hoursAfterPost": 1, "text": "Est-ce que le `@placeholder` garde la même hauteur que le graphique final ? Chez nous, c’est le décalage de mise en page qui nous a fait hésiter à adopter `@defer`." },
+  { "post": "angular-defer", "author": "camille_r", "hoursAfterPost": 2, "text": "Oui, j’ai fixé la hauteur en CSS sur le conteneur, pas sur le placeholder. Le CLS est resté à zéro sur nos mesures Lighthouse." },
+  { "post": "angular-defer", "author": "alexandre_m", "hoursAfterPost": 3, "text": "Merci pour le détail sur `minimum 300ms`, je n’avais pas pensé au clignotement sur réseau rapide." },
+
+  { "post": "ts-satisfies", "author": "hugo_b", "hoursAfterPost": 2, "text": "J’ai testé sur un dictionnaire de traductions et la complétion des clés fonctionne enfin dans les appels `t('...')`. Gros gain au quotidien." },
+  { "post": "ts-satisfies", "author": "malo", "hoursAfterPost": 4, "text": "Petite précision utile : `satisfies` ne change pas le type de la variable, il ne fait que vérifier. Si on veut aussi figer les littéraux, on peut le combiner avec `as const`." },
+  { "post": "ts-satisfies", "author": "ines_dev", "hoursAfterPost": 5, "text": "Exact, `as const satisfies Record<string, Route>` est la combinaison que j’utilise pour les routes, avec des propriétés en lecture seule." },
+
+  { "post": "java-virtual-threads", "author": "ravi", "hoursAfterPost": 2, "text": "Quelle taille de pool Hikari a été retenue au final ? Nous avons constaté que passé 20 connexions, notre PostgreSQL passait plus de temps à commuter qu’à travailler." },
+  { "post": "java-virtual-threads", "author": "malo", "hoursAfterPost": 3, "text": "Vingt aussi, avec un sémaphore à quinze pour les requêtes lourdes. Les requêtes de lecture simples passent sans limite." },
+  { "post": "java-virtual-threads", "author": "amelie_t", "hoursAfterPost": 6, "text": "Côté .NET, la question ne se pose pas de la même façon grâce à `async` et `await`, mais le goulot du pool de connexions est identique. C’est rassurant de voir le même problème des deux côtés." },
+  { "post": "java-virtual-threads", "author": "alexandre_m", "hoursAfterPost": 8, "text": "Le remplacement de `synchronized` par `ReentrantLock` a été fait partout ou seulement sur les chemins critiques ?" },
+  { "post": "java-virtual-threads", "author": "malo", "hoursAfterPost": 9, "text": "Seulement là où un appel réseau se trouvait dans la section critique, on les a repérés avec `-Djdk.tracePinnedThreads=full`." },
+
+  { "post": "rust-emprunt", "author": "camille_r", "hoursAfterPost": 3, "text": "Le coup du trait par référence, je le note. Je bute justement sur les durées de vie dans les structures qui contiennent des références." },
+  { "post": "rust-emprunt", "author": "noah", "hoursAfterPost": 4, "text": "Pour les structures, mon conseil est de commencer par posséder les données (`String` plutôt que `&str`) et de n’emprunter que lorsque la mesure le justifie. On gagne des semaines." },
+  { "post": "rust-emprunt", "author": "yanis", "hoursAfterPost": 7, "text": "Même impression en Go quand on passe aux pointeurs : dessiner qui possède quoi aide plus que n’importe quelle documentation." },
+
+  { "post": "go-context-timeout", "author": "malo", "hoursAfterPost": 2, "text": "Un multiple du p99 est une bonne méthode. Nous avions pris un nombre rond au hasard, et il n’était pas adapté à deux de nos fournisseurs." },
+  { "post": "go-context-timeout", "author": "sofia_k", "hoursAfterPost": 5, "text": "Et pour les nouvelles tentatives, vous les placez dans le même contexte ou chaque essai a son propre délai ?" },
+  { "post": "go-context-timeout", "author": "yanis", "hoursAfterPost": 6, "text": "Un délai par essai, sous un délai global plus large qui borne l’ensemble. Sinon trois essais de deux secondes dépassent largement ce que l’utilisateur est prêt à attendre." },
+
+  { "post": "python-uv", "author": "noah", "hoursAfterPost": 3, "text": "La différence de vitesse d’installation est frappante, surtout en CI avec le cache activé. Nous sommes passés de 70 secondes à moins de 10." },
+  { "post": "python-uv", "author": "ravi", "hoursAfterPost": 6, "text": "Et pour les versions de Python, `uv python install` remplace pyenv chez vous ?" },
+  { "post": "python-uv", "author": "sofia_k", "hoursAfterPost": 8, "text": "Oui, `uv python install 3.12` puis un fichier `.python-version` à la racine, et pyenv a disparu de mon poste." },
+
+  { "post": "react-use-effect", "author": "lea_codes", "hoursAfterPost": 1, "text": "Nous avons fait la même relecture en équipe et trouvé un effet qui appelait `setState` dans une boucle de dépendances. Il tournait depuis deux ans." },
+  { "post": "react-use-effect", "author": "ines_dev", "hoursAfterPost": 2, "text": "Pour le focus d’un champ, `autoFocus` ou une ref callback évitent aussi l’effet dans la plupart des cas." },
+  { "post": "react-use-effect", "author": "hugo_b", "hoursAfterPost": 3, "text": "Bonne remarque, la ref callback m’a permis de supprimer l’un des quatre derniers. Il m’en reste trois." },
+  { "post": "react-use-effect", "author": "camille_r", "hoursAfterPost": 6, "text": "Le même principe vaut pour Angular avec `computed`. On voit moins de dérivation dans des `ngOnChanges`, mais les anciens projets en regorgent." },
+  { "post": "react-use-effect", "author": "alexandre_m", "hoursAfterPost": 9, "text": "Très utile, je vais relire mes composants avec cette grille : pour chaque effet, je me demande s’il réagit à un état ou à un événement extérieur." },
+
+  { "post": "vue-composables", "author": "lea_codes", "hoursAfterPost": 5, "text": "La séparation entre logique pure et enveloppe de cycle de vie est un bon réflexe, on la retrouve avec les hooks React personnalisés." },
+  { "post": "vue-composables", "author": "hugo_b", "hoursAfterPost": 7, "text": "C’est un peu le même exercice, oui. Les deux écosystèmes finissent par converger sur cette idée." },
+
+  { "post": "csharp-records", "author": "malo", "hoursAfterPost": 4, "text": "C’est l’équivalent des records Java, avec l’expression `with` en plus. Elle nous manque parfois, on la simule avec un constructeur de copie." },
+  { "post": "csharp-records", "author": "amelie_t", "hoursAfterPost": 6, "text": "L’expression `with` est ce que j’apprécie le plus, elle rend l’immutabilité agréable à utiliser au lieu de la subir." },
+  { "post": "csharp-records", "author": "ravi", "hoursAfterPost": 12, "text": "Et pour la persistance avec Entity Framework ? J’ai eu des surprises avec les records comme entités." },
+  { "post": "csharp-records", "author": "amelie_t", "hoursAfterPost": 14, "text": "Je les évite pour les entités, qui ont une identité, et je les réserve aux objets valeur, que EF sait mapper en types possédés." },
+
+  { "post": "java-n-plus-un", "author": "malo", "hoursAfterPost": 2, "text": "Excellente idée. Nous avons ajouté la même chose en CI et un développeur a cassé le build le jour même avec un `getAuthor()` paresseux. Le test a payé immédiatement." },
+  { "post": "java-n-plus-un", "author": "amelie_t", "hoursAfterPost": 5, "text": "Entity Framework a un équivalent avec les intercepteurs de commandes. Je vais écrire un test sur le même modèle." },
+  { "post": "java-n-plus-un", "author": "alexandre_m", "hoursAfterPost": 10, "text": "Le seuil de 5 requêtes est fixé à la main ? Je me demande comment éviter qu’il devienne trop souple avec le temps." },
+  { "post": "java-n-plus-un", "author": "ravi", "hoursAfterPost": 12, "text": "Oui, à la main. Je le resserre à chaque correction, et la valeur exacte figure dans le message d’erreur pour que personne ne soit tenté de l’augmenter sans y réfléchir." },
+
+  { "post": "structured-clone", "author": "hugo_b", "hoursAfterPost": 3, "text": "Je l’ai utilisé pour dupliquer l’état initial d’un store dans mes tests. Ça m’a évité une dépendance à lodash." },
+  { "post": "structured-clone", "author": "ines_dev", "hoursAfterPost": 4, "text": "Il ne copie pas non plus les propriétés non énumérables ni les getters. C’est rare, mais ça m’a déjà surprise sur des objets venus d’une bibliothèque." },
+  { "post": "structured-clone", "author": "sofia_k", "hoursAfterPost": 8, "text": "Python a `copy.deepcopy`, qui lui conserve les classes. Je suis content de voir que JavaScript rattrape son retard sur ce point." },
+
+  { "post": "ts-result", "author": "camille_r", "hoursAfterPost": 6, "text": "Avez-vous essayé une bibliothèque comme `neverthrow`, ou préférez-vous le type écrit à la main ?" },
+  { "post": "ts-result", "author": "ines_dev", "hoursAfterPost": 8, "text": "À la main pour l’instant. Vingt lignes suffisent et je n’ai pas à expliquer une dépendance de plus à l’équipe." },
+  { "post": "ts-result", "author": "noah", "hoursAfterPost": 10, "text": "C’est exactement ce que Rust impose par défaut, avec `Result<T, E>` dans le langage. Voir le motif adopté en TypeScript fait plaisir." },
+
+  { "post": "go-table-tests", "author": "malo", "hoursAfterPost": 6, "text": "Avec JUnit 5, `@ParameterizedTest` et `@MethodSource` couvrent le même besoin, mais le test en Go est plus lisible parce que les cas sont dans le même fichier." },
+  { "post": "go-table-tests", "author": "yanis", "hoursAfterPost": 9, "text": "C’est aussi ce que j’apprécie : tout reste sous les yeux, sans fichier de données ni annotation." },
+
+  { "post": "react-compiler", "author": "hugo_b", "hoursAfterPost": 5, "text": "Les 35 rendus évités sur la liste de factures concernent des composants d’une ligne ou des lignes complètes ?" },
+  { "post": "react-compiler", "author": "lea_codes", "hoursAfterPost": 7, "text": "Des lignes complètes, avec un menu déroulant par ligne. C’est ce menu qui re-rendait toute la liste à chaque ouverture." },
+  { "post": "react-compiler", "author": "ines_dev", "hoursAfterPost": 14, "text": "L’étape en mode d’annotation est un très bon moyen de convaincre une équipe sceptique avec des chiffres plutôt qu’avec des opinions." },
+
+  { "post": "js-event-loop", "author": "camille_r", "hoursAfterPost": 4, "text": "Il faudrait ajouter `queueMicrotask` à l’exemple, qui se comporte comme une promesse résolue sans en créer une." },
+  { "post": "js-event-loop", "author": "hugo_b", "hoursAfterPost": 10, "text": "Et `requestAnimationFrame`, pour compléter la carte : il s’exécute avant la peinture, ni microtâche ni macrotâche ordinaire." },
+
+  { "post": "java-sealed-records", "author": "amelie_t", "hoursAfterPost": 5, "text": "C# a un équivalent avec les switch expressions et les types de la même famille, sans exhaustivité garantie tant qu’on n’a pas de `sealed`. Les unions discriminées sont attendues." },
+  { "post": "java-sealed-records", "author": "ravi", "hoursAfterPost": 9, "text": "Utilisé en production pour des événements métier. Le jour où nous avons ajouté un événement, le compilateur nous a désigné quinze endroits à mettre à jour." },
+  { "post": "java-sealed-records", "author": "malo", "hoursAfterPost": 11, "text": "Ce sont exactement ces quinze endroits qu’un `default` aurait cachés. On l’a interdit par convention dans l’équipe." },
+
+  { "post": "rust-question-mark", "author": "yanis", "hoursAfterPost": 7, "text": "En Go, la même fonction prend six lignes de `if err != nil`. La concision de `?` se paie par une trace moins explicite, mais je comprends l’attrait." },
+  { "post": "rust-question-mark", "author": "noah", "hoursAfterPost": 12, "text": "On peut ajouter du contexte avec `anyhow::Context` et `.context(\"lecture de PORT\")?`, ce qui rend les messages aussi parlants que ceux de Go." },
+
+  { "post": "angular-signals", "author": "ines_dev", "hoursAfterPost": 6, "text": "Pour les formulaires réactifs, continuez-vous avec `valueChanges` ou passez-vous à `toSignal` ?" },
+  { "post": "angular-signals", "author": "camille_r", "hoursAfterPost": 8, "text": "`toSignal(control.valueChanges, { initialValue: control.value })` à la frontière du template, et le reste du composant ne parle plus qu’en signaux." },
+  { "post": "angular-signals", "author": "alexandre_m", "hoursAfterPost": 15, "text": "J’ai commencé la migration sur mon projet de formation, la partie la plus facile est effectivement l’état simple d’un service." },
+
+  { "post": "python-dataclass-slots", "author": "noah", "hoursAfterPost": 8, "text": "Le gain est impressionnant. Avez-vous comparé avec `NamedTuple` ou avec `array` pour des données purement numériques ?" },
+  { "post": "python-dataclass-slots", "author": "sofia_k", "hoursAfterPost": 12, "text": "Un `NamedTuple` donne un résultat comparable, mais on perd la mutabilité optionnelle. Pour du pur numérique, NumPy reste hors catégorie." }
+]
