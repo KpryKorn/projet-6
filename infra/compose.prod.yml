@@ -16,7 +16,7 @@ services:
 
   backend:
     build:
-      context: ../backend/mdd
+      context: ./backend/mdd
     restart: unless-stopped
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -32,8 +32,10 @@ services:
   # Seul service exposé : sert l'Angular et proxifie /api vers le backend
   frontend:
     build:
-      context: ../frontend
+      context: ./frontend
     restart: unless-stopped
+    expose:
+      - "80"
     depends_on:
       - backend
 
